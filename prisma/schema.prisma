@@ -13,3 +13,50 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+model User{
+  id  Int @id @default(autoincrement())
+  username String @unique
+  email    String @unique
+  password String
+  currency String @default("ETB")
+  monthlyBudget Decimal @db.Decimal(10,2)
+  createdAt DateTime @default(now())
+  //relations
+  incomes Income[]
+  expenses Expense[]
+}
+model Category{
+  id Int @id @default(autoincrement())
+  name String @unique
+  expenses Expense[]
+
+}
+model Expense{
+  id Int @id @default(autoincrement())
+  title String 
+  description String?
+  amount Decimal @db.Decimal(10,2)
+  paymentMethod String //cash,credit card,CBE,telebirr,...
+  date DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  //relationship to user
+  userId Int
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  // relationship to category
+  categoryId Int
+  category Category @relation(fields:[categoryId],references:[id])
+}
+model Income{
+  id Int @id @default(autoincrement())
+  source String //could be globalized like categories table
+  description String?
+  amount Decimal @db.Decimal(10,2)
+  date DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //relationship to user
+  userId Int
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+}
