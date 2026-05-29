@@ -1,9 +1,12 @@
 import express, { Request, Response } from "express";
+import helmet from "helmet";
+import cors from "cors";
 import authRoutes from "./routes/auth.routes";
 const app = express();
 
 app.use(express.json());
-
+app.use(helmet());
+app.use(cors());
 //defined routes
 app.use("/api/auth", authRoutes);
 
