@@ -1,9 +1,9 @@
-import { hashPassword } from "../utils/password";
+import { hashPassword, comparePassword } from "../utils/password";
 import { prisma } from "../config/lib";
 import type { UserModel } from "../../prisma/generated/prisma/models";
 import { signUpDto } from "../dtos/user.dto";
 export type SafeUser = Omit<UserModel, "password">;
-//============ register================================================
+
 async function registerUser(data: signUpDto): Promise<SafeUser> {
   const checkByEmail = await prisma.user.findFirst({
     where: {
@@ -42,5 +42,26 @@ async function registerUser(data: signUpDto): Promise<SafeUser> {
   return newUser;
 }
 //===================================================================
-
-export { registerUser };
+async function loginUser(data: {
+  emailOrUsername: string;
+  password: string;
+}): Promise<SafeUser> {
+  const checkUser = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { email: data.emailOrUsername.toLowerCase() },
+        { username: data.emailOrUsername },
+      ],
+    },
+  });
+  if (!checkUser) {
+    throw new Error("Invalid credentials!");
+  }
+  const isPassValid = await comparePassword(data.password, checkUser.password);
+  if (!isPassValid) {
+    throw new Error("Incorrect password!");
+  }
+  const { password, ...safeUser } = checkUser;
+  return safeUser;
+}
+export { registerUser, loginUser };

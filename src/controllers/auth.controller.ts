@@ -1,4 +1,4 @@
-import { registerUser } from "../services/auth.service";
+import { registerUser, loginUser } from "../services/auth.service";
 import { Request, Response } from "express";
 
 async function signUp(req: Request, res: Response) {
@@ -38,4 +38,36 @@ async function signUp(req: Request, res: Response) {
     });
   }
 }
-export { signUp };
+
+async function login(req: Request, res: Response) {
+  try {
+    const { emailOrUsername, password } = req.body;
+    if (!emailOrUsername || !password) {
+      res.status(400).json({
+        success: false,
+        message: "Email/Username and password are required",
+      });
+      return;
+    }
+    const user = await loginUser({ emailOrUsername, password });
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      data: user,
+    });
+  } catch (error: any) {
+    if (
+      error.message.includes("Invalid credentials") ||
+      error.message.includes("Incorrect password")
+    ) {
+      res.status(401).json({
+        error: error.message,
+      });
+      return;
+    }
+    res.status(500).json({
+      error: "Internal server error",
+    });
+  }
+}
+export { signUp, login };
