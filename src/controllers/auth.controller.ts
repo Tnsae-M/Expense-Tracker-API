@@ -1,6 +1,6 @@
 import { registerUser, loginUser } from "../services/auth.service";
 import { Request, Response } from "express";
-
+import { generateToken } from "../utils/token";
 async function signUp(req: Request, res: Response) {
   try {
     const { fullName, username, email, password, monthlyBudget, currency } =
@@ -20,10 +20,12 @@ async function signUp(req: Request, res: Response) {
       monthlyBudget,
       currency,
     });
+    const token = await generateToken(newUser.id, newUser.email);
     res.status(201).json({
       success: true,
       message: "User registered successfully",
       data: newUser,
+      token: token,
     });
   } catch (error: any) {
     //known validation error
@@ -50,13 +52,16 @@ async function login(req: Request, res: Response) {
       return;
     }
     const user = await loginUser({ emailOrUsername, password });
+    const token = await generateToken(user.id, user.email);
     res.status(200).json({
       success: true,
       message: "Login successful",
       data: user,
+      token: token,
     });
   } catch (error: any) {
     if (
+      //the expected invalid credential error is not showing up when testing!
       error.message.includes("Invalid credentials") ||
       error.message.includes("Incorrect password")
     ) {
@@ -68,6 +73,7 @@ async function login(req: Request, res: Response) {
     res.status(500).json({
       error: "Internal server error",
     });
+    console.log(error.message);
   }
 }
 export { signUp, login };
