@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import limiter from "./utils/rate.limiter";
 import authRoutes from "./routes/auth.routes";
+import { globalErrorHandler } from "./middleware/error.guard";
+import { appError } from "./utils/appError";
 const app = express();
 
 app.use(express.json());
@@ -25,4 +27,8 @@ app.get("/start", (req: Request, res: Response) => {
     message: "welcome to student expense tracker API",
   });
 });
+app.use((req, res, next) => {
+  next(new appError(`Can't find ${req.originalUrl} on this server`, 404));
+});
+app.use(globalErrorHandler);
 export default app;

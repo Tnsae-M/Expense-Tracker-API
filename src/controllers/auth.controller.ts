@@ -1,49 +1,30 @@
 import { registerUser, loginUser } from "../services/auth.service";
 import { Request, Response } from "express";
 import { generateToken } from "../utils/token";
-async function signUp(req: Request, res: Response) {
-  try {
-    const { fullName, username, email, password, monthlyBudget, currency } =
-      req.body;
-    if (!fullName || !username || !email || !password || !monthlyBudget) {
-      res.status(400).json({
-        success: false,
-        message: "All fields are required",
-      });
-      return;
-    }
-    const newUser = await registerUser({
-      fullName,
-      username,
-      email,
-      password,
-      monthlyBudget,
-      currency,
-    });
-    const accessToken = await generateToken(newUser.id, newUser.email);
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      sameSite: "strict",
-      maxAge: 2 * 60 * 60 * 1000, //2hrs
-    });
-    res.status(201).json({
-      success: true,
-      message: "User registered successfully",
-      data: newUser,
-    });
-  } catch (error: any) {
-    //known validation error
-    if (error.message.includes("already exists")) {
-      res.status(400).json({
-        error: error.message,
-      });
-      return;
-    }
-    res.status(500).json({
-      error: "Internal server error",
-    });
-  }
-}
+import { catchAsync } from "../utils/catch.async";
+export const signUp = catchAsync(async (req: Request, res: Response) => {
+  const { fullName, email, username, password, monthlyBudget, currency } =
+    req.body;
+  const newUser = await registerUser({
+    fullName,
+    email,
+    password,
+    username,
+    monthlyBudget,
+    currency,
+  });
+  const accessToken = await generateToken(newUser.id, newUser.email);
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    sameSite: "strict",
+    maxAge: 2 * 60 * 60 * 1000, //2hrs
+  });
+  res.status(201).json({
+    success: true,
+    message: "User registered successfully",
+    data: newUser,
+  });
+});
 
 async function login(req: Request, res: Response) {
   try {
@@ -101,4 +82,4 @@ async function logout(req: Request, res: Response) {
     });
   }
 }
-export { signUp, login, logout };
+export { login, logout };
