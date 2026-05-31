@@ -89,6 +89,7 @@ async function logout(req: Request, res: Response) {
     res.clearCookie("accessToken", {
       httpOnly: true,
       sameSite: "strict",
+      path: "/",
     });
     res.status(200).json({
       success: true,
