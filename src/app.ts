@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import limiter from "./utils/rate.limiter";
 import authRoutes from "./routes/auth.routes";
+import userRoutes from "./routes/user.routes";
 import { globalErrorHandler } from "./middleware/error.guard";
 import { appError } from "./utils/appError";
 const app = express();
@@ -14,6 +15,7 @@ app.use(cors()); // or cors({ origin: "http://localhost:3000" }) for specific or
 app.use(limiter);
 app.use(cookieParser());
 //defined routes
+app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 
 //server status routes
