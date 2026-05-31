@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import limiter from "./utils/rate.limiter";
 import authRoutes from "./routes/auth.routes";
@@ -9,6 +10,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors()); // or cors({ origin: "http://localhost:3000" }) for specific origin of frontend
 app.use(limiter);
+app.use(cookieParser());
 //defined routes
 app.use("/api/auth", authRoutes);
 

@@ -20,12 +20,16 @@ async function signUp(req: Request, res: Response) {
       monthlyBudget,
       currency,
     });
-    const token = await generateToken(newUser.id, newUser.email);
+    const accessToken = await generateToken(newUser.id, newUser.email);
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      sameSite: "strict",
+      maxAge: 2 * 60 * 60 * 1000, //2hrs
+    });
     res.status(201).json({
       success: true,
       message: "User registered successfully",
       data: newUser,
-      token: token,
     });
   } catch (error: any) {
     //known validation error
@@ -52,12 +56,16 @@ async function login(req: Request, res: Response) {
       return;
     }
     const user = await loginUser({ emailOrUsername, password });
-    const token = await generateToken(user.id, user.email);
+    const accessToken = await generateToken(user.id, user.email);
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      sameSite: "strict",
+      maxAge: 2 * 60 * 60 * 1000, //2hrs
+    });
     res.status(200).json({
       success: true,
       message: "Login successful",
       data: user,
-      token: token,
     });
   } catch (error: any) {
     if (
@@ -76,4 +84,20 @@ async function login(req: Request, res: Response) {
     console.log(error.message);
   }
 }
-export { signUp, login };
+async function logout(req: Request, res: Response) {
+  try {
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      sameSite: "strict",
+    });
+    res.status(200).json({
+      success: true,
+      message: "your account has been logged out successfully",
+    });
+  } catch (er) {
+    res.status(500).json({
+      error: "Internal server error",
+    });
+  }
+}
+export { signUp, login, logout };
