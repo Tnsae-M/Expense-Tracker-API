@@ -22,7 +22,7 @@ export function globalErrorHandler(
       error: message,
     });
   }
-  console.log("unhandled error: ", err);
+  console.log("unhandled error: ", err.message);
   return res.status(statusCode).json({
     success: false,
     message: "Something went wrong",

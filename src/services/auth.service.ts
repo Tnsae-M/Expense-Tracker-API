@@ -54,22 +54,26 @@ async function loginUser(data: {
   emailOrUsername: string;
   password: string;
 }): Promise<SafeUser> {
+  const { emailOrUsername, password } = data;
+  if (!emailOrUsername || !password) {
+    throw new appError("missing username/email or password field", 400);
+  }
   const checkUser = await prisma.user.findFirst({
     where: {
       OR: [
-        { email: data.emailOrUsername.toLowerCase().trim() },
-        { username: data.emailOrUsername.trim() },
+        { email: emailOrUsername.toLowerCase().trim() },
+        { username: emailOrUsername.trim() },
       ],
     },
   });
   if (!checkUser) {
     throw new appError("Invalid credentials!", 401);
   }
-  const isPassValid = await comparePassword(data.password, checkUser.password);
+  const isPassValid = await comparePassword(password, checkUser.password);
   if (!isPassValid) {
     throw new appError("Incorrect password!", 401);
   }
-  const { password, ...safeUser } = checkUser;
+  const { password: dbPassword, ...safeUser } = checkUser;
   return safeUser;
 }
 export { registerUser, loginUser };
