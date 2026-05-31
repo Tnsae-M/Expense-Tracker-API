@@ -24,8 +24,8 @@ export async function protectedRoute(
       });
     }
     req.user = {
-      userId: decodedLoad.userId,
-      email: decodedLoad.email,
+      tokenUserId: decodedLoad.userId,
+      tokenEmail: decodedLoad.email,
     };
     next();
   } catch (er) {

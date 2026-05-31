@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { generateToken } from "../utils/token";
 import { catchAsync } from "../utils/catch.async";
 import { appError } from "../utils/appError";
+import { prisma } from "../config/lib";
 export const signUp = catchAsync(async (req: Request, res: Response) => {
   const newUser = await registerUser(req.body);
   const accessToken = await generateToken(newUser.id, newUser.email);
@@ -43,4 +44,27 @@ const logout = catchAsync(async (req: Request, res: Response) => {
     message: "your account has been logged out successfully",
   });
 });
-export { login, logout };
+
+//profile routes
+const getProfile = catchAsync(async (req: Request, res: Response) => {
+  const userDataToken = req.user;
+  if (!userDataToken) {
+    throw new appError("user data not found in token", 400);
+  }
+  const currentUser = await prisma.user.findUnique({
+    where: { id: userDataToken.tokenUserId },
+    select: {
+      fullName: true,
+      username: true,
+      email: true,
+      monthlyBudget: true,
+      currency: true,
+    },
+  });
+  return res.status(200).json({
+    success: true,
+    message: `welcome to profile page, ${currentUser?.username}`,
+    data: currentUser,
+  });
+});
+export { login, logout, getProfile };
