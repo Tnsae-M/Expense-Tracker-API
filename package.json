@@ -37,7 +37,8 @@
     "express-rate-limit": "^8.5.2",
     "helmet": "^8.2.0",
     "jose": "^6.2.3",
-    "pg": "^8.21.0"
+    "pg": "^8.21.0",
+    "zod": "^4.4.3"
   },
   "overrides": {
     "@hono/node-server": "^1.19.13"

@@ -3,6 +3,7 @@ import { catchAsync } from "../utils/catch.async";
 import { prisma } from "../config/lib";
 import { Request, Response } from "express";
 // import { SafeUser } from "../services/auth.service";
+import { UpdateProfileInput } from "../schemas/profile.schema";
 //profile routes
 const getProfile = catchAsync(async (req: Request, res: Response) => {
   const userDataToken = req.user;
@@ -28,21 +29,22 @@ const getProfile = catchAsync(async (req: Request, res: Response) => {
     data: currentUser,
   });
 });
+
 const updateProfile = catchAsync(async (req: Request, res: Response) => {
   const userDataToken = req.user;
   if (!userDataToken) {
     throw new appError("user data not found in token", 400);
   }
+  const validatedData: UpdateProfileInput = req.body;
+  if (Object.keys(validatedData).length === 0) {
+    return res.status(200).json({
+      success: true,
+      message: "No changes detected, profile remains unchanged",
+    });
+  }
   const currentUser = await prisma.user.update({
     where: { id: userDataToken.tokenUserId },
-    data: {
-      fullName: req.body.fullName,
-      username: req.body.username,
-      email: req.body.email,
-      password: req.body.password,
-      monthlyBudget: req.body.monthlyBudget,
-      currency: req.body.currency,
-    },
+    data: validatedData,
   });
   // const { password: dbPassword, ...SafeUser } = currentUser;
   return res.status(200).json({
