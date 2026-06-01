@@ -5,6 +5,7 @@ import cors from "cors";
 import limiter from "./utils/rate.limiter";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
+import categoryRoutes from "./routes/category.routes";
 import { globalErrorHandler } from "./middleware/error.guard";
 import { appError } from "./utils/appError";
 const app = express();
@@ -17,6 +18,7 @@ app.use(cookieParser());
 //defined routes
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/categories", categoryRoutes);
 
 //server status routes
 app.get("/", (req: Request, res: Response) => {
