@@ -56,7 +56,6 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
     message: "profile updated successfully",
     profile: currentUser,
   });
-  /* Got no fallback mechanism for sending empty response after successfull update, also the above !req.body fallback is getting bypassed and a {} body returns the success response with all data of user.
-   */
+  // no check if password is the same logic before updating password.
 });
 export { getProfile, updateProfile };
