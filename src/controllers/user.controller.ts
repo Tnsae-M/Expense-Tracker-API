@@ -2,6 +2,7 @@ import { appError } from "../utils/appError";
 import { catchAsync } from "../utils/catch.async";
 import { prisma } from "../config/lib";
 import { Request, Response } from "express";
+import { hashPassword } from "../utils/password";
 // import { SafeUser } from "../services/auth.service";
 import { UpdateProfileInput } from "../schemas/profile.schema";
 //profile routes
@@ -41,6 +42,9 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
       success: true,
       message: "No changes detected, profile remains unchanged",
     });
+  }
+  if (validatedData.password) {
+    validatedData.password = await hashPassword(validatedData.password);
   }
   const currentUser = await prisma.user.update({
     where: { id: userDataToken.tokenUserId },
