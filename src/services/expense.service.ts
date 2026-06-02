@@ -57,4 +57,21 @@ async function getExpense(filters: ExpenseQueryType): Promise<ExpenseModel[]> {
   }
   return expenses;
 }
-export { createExpense, getExpense };
+async function updateExpense(
+  data: expenseInputType,
+  id: number,
+): Promise<ExpenseModel> {
+  const checkExpense = await prisma.expense.findUnique({
+    where: { id },
+  });
+  if (!checkExpense) {
+    throw new appError("Expense not found!", 404);
+  }
+  data.date = new Date(data.date);
+  const updatedExpense = await prisma.expense.update({
+    where: { id },
+    data,
+  });
+  return updatedExpense;
+}
+export { createExpense, getExpense, updateExpense };

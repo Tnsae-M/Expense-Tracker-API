@@ -1,6 +1,10 @@
 import { catchAsync } from "../utils/catch.async";
 import { Request, Response } from "express";
-import { createExpense, getExpense } from "../services/expense.service";
+import {
+  createExpense,
+  updateExpense,
+  getExpense,
+} from "../services/expense.service";
 import { expenseQuerySchema } from "../schemas/expense.schema";
 export const newExpense = catchAsync(async (req: Request, res: Response) => {
   const newExpense = await createExpense(req.body);
@@ -28,6 +32,23 @@ export const getExpenseByFilter = catchAsync(
       message: "expense(s) found successfully.",
       result: expense.length,
       data: expense,
+    });
+  },
+);
+export const updateExpenseById = catchAsync(
+  async (req: Request, res: Response) => {
+    const expenseId = Number(req.params.id);
+    if (Object.keys(req.body).length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No changes detected, Expense remains unchanged",
+      });
+    }
+    const updatedExpense = await updateExpense(req.body, expenseId);
+    res.status(200).json({
+      success: true,
+      message: "Expense updated successfully",
+      data: updatedExpense,
     });
   },
 );
