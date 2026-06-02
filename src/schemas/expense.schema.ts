@@ -8,4 +8,12 @@ export const expenseInput = z.object({
   userId: z.number().positive(),
   categoryId: z.number().positive(),
 });
+export const expenseQuerySchema = z.object({
+  id: z.coerce.number().positive().optional(),
+  title: z.string().optional(),
+  userId: z.coerce.number().positive().optional(),
+  categoryId: z.coerce.number().positive().optional(),
+});
+
+export type ExpenseQueryType = z.infer<typeof expenseQuerySchema>;
 export type expenseInputType = z.infer<typeof expenseInput>;

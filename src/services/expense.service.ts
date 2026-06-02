@@ -1,7 +1,7 @@
 import { ExpenseModel } from "../../prisma/generated/prisma/models/Expense";
 import { appError } from "../utils/appError";
 import { prisma } from "../config/lib";
-import { expenseInputType } from "../schemas/expense.schema";
+import { expenseInputType, ExpenseQueryType } from "../schemas/expense.schema";
 async function createExpense(data: expenseInputType): Promise<ExpenseModel> {
   if (!data) {
     throw new appError("missing expected field(s)!", 400);
@@ -27,11 +27,34 @@ async function createExpense(data: expenseInputType): Promise<ExpenseModel> {
   const newExpense = await prisma.expense.create({ data });
   return newExpense;
 }
-async function getAllExpenses(): Promise<ExpenseModel[]> {
-  const expenses = await prisma.expense.findMany();
+// async function getAllExpenses(
+//   userId: number | undefined,
+// ): Promise<ExpenseModel[]> {
+//   const expenses = await prisma.expense.findMany({ where: { userId: userId } });
+//   if (!expenses) {
+//     throw new appError("no expense is found", 404);
+//   }
+//   return expenses;
+// }
+async function getExpense(filters: ExpenseQueryType): Promise<ExpenseModel[]> {
+  const { id, title, userId, categoryId } = filters;
+  const expenses = await prisma.expense.findMany({
+    where: {
+      id: id,
+      userId: userId,
+      categoryId: categoryId,
+      title: title
+        ? {
+            contains: title,
+            mode: "insensitive",
+          }
+        : undefined,
+    },
+    orderBy: { date: "desc" },
+  });
   if (!expenses) {
-    throw new appError("no expense is found", 404);
+    throw new appError("expense not found!", 404);
   }
   return expenses;
 }
-export { createExpense, getAllExpenses };
+export { createExpense, getExpense };
