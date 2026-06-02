@@ -6,6 +6,7 @@ import limiter from "./utils/rate.limiter";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import categoryRoutes from "./routes/category.routes";
+import expenseRoutes from "./routes/expense.route";
 import { globalErrorHandler } from "./middleware/error.guard";
 import { appError } from "./utils/appError";
 const app = express();
@@ -19,7 +20,7 @@ app.use(cookieParser());
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
-
+app.use("/api/expenses", expenseRoutes);
 //server status routes
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({
