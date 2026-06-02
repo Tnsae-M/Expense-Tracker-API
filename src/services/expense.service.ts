@@ -27,4 +27,11 @@ async function createExpense(data: expenseInputType): Promise<ExpenseModel> {
   const newExpense = await prisma.expense.create({ data });
   return newExpense;
 }
-export { createExpense };
+async function getAllExpenses(): Promise<ExpenseModel[]> {
+  const expenses = await prisma.expense.findMany();
+  if (!expenses) {
+    throw new appError("no expense is found", 404);
+  }
+  return expenses;
+}
+export { createExpense, getAllExpenses };
