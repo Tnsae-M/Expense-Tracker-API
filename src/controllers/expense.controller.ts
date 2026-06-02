@@ -4,6 +4,7 @@ import {
   createExpense,
   updateExpense,
   getExpense,
+  deleteExpense,
 } from "../services/expense.service";
 import { expenseQuerySchema } from "../schemas/expense.schema";
 export const newExpense = catchAsync(async (req: Request, res: Response) => {
@@ -49,6 +50,17 @@ export const updateExpenseById = catchAsync(
       success: true,
       message: "Expense updated successfully",
       data: updatedExpense,
+    });
+  },
+);
+export const deleteExpenseById = catchAsync(
+  async (req: Request, res: Response) => {
+    const expenseId = Number(req.params.id);
+    const deletedExp = await deleteExpense(expenseId);
+    res.status(200).json({
+      success: true,
+      message: "Expense deleted successfully",
+      data: deletedExp,
     });
   },
 );

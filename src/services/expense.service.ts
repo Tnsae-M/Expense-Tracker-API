@@ -67,11 +67,28 @@ async function updateExpense(
   if (!checkExpense) {
     throw new appError("Expense not found!", 404);
   }
-  data.date = new Date(data.date);
+  if (data.date) {
+    data.date = new Date(data.date);
+  }
+
+  console.log(data.date);
   const updatedExpense = await prisma.expense.update({
     where: { id },
     data,
   });
   return updatedExpense;
 }
-export { createExpense, getExpense, updateExpense };
+
+async function deleteExpense(id: number): Promise<ExpenseModel> {
+  const checkExpense = await prisma.expense.findUnique({
+    where: { id },
+  });
+  if (!checkExpense) {
+    throw new appError("Expense to delete not found!", 404);
+  }
+  const deletedExpense = await prisma.expense.delete({
+    where: { id },
+  });
+  return deletedExpense;
+}
+export { createExpense, getExpense, updateExpense, deleteExpense };

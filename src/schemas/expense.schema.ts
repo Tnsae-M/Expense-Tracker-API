@@ -4,7 +4,7 @@ export const expenseInput = z.object({
   description: z.string().max(100, "description can't be more than 100 chars"),
   amount: z.number(),
   paymentMethod: z.string(),
-  date: z.coerce.date(),
+  date: z.coerce.date().default(new Date()),
   userId: z.number().positive(),
   categoryId: z.number().positive(),
 });
