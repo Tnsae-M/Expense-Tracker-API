@@ -37,7 +37,7 @@ model Expense{
   description String?
   amount Decimal @db.Decimal(10,2)
   paymentMethod String //cash,credit card,CBE,telebirr,...
-  date DateTime
+  date DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   //relationship to user
@@ -52,7 +52,7 @@ model Income{
   source String //could be globalized like categories table
   description String?
   amount Decimal @db.Decimal(10,2)
-  date DateTime
+  date DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
