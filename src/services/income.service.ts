@@ -60,10 +60,12 @@ async function getIncomeByFilter(
 async function updateIncome(
   data: Partial<incomeInputType>,
   id: number,
+  uid: number,
 ): Promise<IncomeModel> {
   const income = await prisma.income.findUnique({
     where: {
       id: id,
+      userId: uid,
     },
   });
   if (!income) {
@@ -80,4 +82,16 @@ async function updateIncome(
   });
   return updatedIncome;
 }
-export { addIncome, getIncomeByFilter, updateIncome };
+async function deleteIncome(id: number, userId: number): Promise<IncomeModel> {
+  const income = await prisma.income.findUnique({
+    where: { id: id, userId: userId },
+  });
+  if (!income) {
+    throw new appError("income to delete not found!", 404);
+  }
+  const deleteIncome = await prisma.income.delete({
+    where: { id: id },
+  });
+  return deleteIncome;
+}
+export { addIncome, getIncomeByFilter, updateIncome, deleteIncome };

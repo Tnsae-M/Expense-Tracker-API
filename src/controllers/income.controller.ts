@@ -4,6 +4,7 @@ import {
   addIncome,
   getIncomeByFilter,
   updateIncome,
+  deleteIncome,
 } from "../services/income.service";
 import { incomeQuerySchema } from "../schemas/income.schema";
 
@@ -28,15 +29,15 @@ const getIncomeController = catchAsync(async (req: Request, res: Response) => {
 });
 const updateIncomeController = catchAsync(
   async (req: Request, res: Response) => {
-    const id = req.params.id;
-
+    const id = Number(req.params.id);
+    const uid = Number(req.user?.tokenUserId);
     if (Object.keys(req.body).length === 0) {
       return res.status(201).json({
         success: true,
         message: "No changes to update",
       });
     }
-    const updatedIncome = await updateIncome(req.body, Number(id));
+    const updatedIncome = await updateIncome(req.body, id, uid);
     res.status(200).json({
       success: true,
       message: "income updated successfully",
@@ -44,4 +45,21 @@ const updateIncomeController = catchAsync(
     });
   },
 );
-export { addIncomeController, getIncomeController, updateIncomeController };
+const deleteIncomeController = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = Number(req.params.id);
+    const uid = Number(req.user?.tokenUserId);
+    const deleteInc = await deleteIncome(id, uid);
+    res.status(201).json({
+      success: true,
+      message: "income deleted successfully.",
+      data: deleteInc,
+    });
+  },
+);
+export {
+  addIncomeController,
+  getIncomeController,
+  updateIncomeController,
+  deleteIncomeController,
+};
