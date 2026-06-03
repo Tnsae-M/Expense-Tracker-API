@@ -57,4 +57,27 @@ async function getIncomeByFilter(
   });
   return incomes;
 }
-export { addIncome, getIncomeByFilter };
+async function updateIncome(
+  data: Partial<incomeInputType>,
+  id: number,
+): Promise<IncomeModel> {
+  const income = await prisma.income.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  if (!income) {
+    throw new appError("income to update not found", 404);
+  }
+  if (data.date) {
+    data.date = new Date(data.date);
+  }
+  const updatedIncome = await prisma.income.update({
+    where: {
+      id: id,
+    },
+    data: data,
+  });
+  return updatedIncome;
+}
+export { addIncome, getIncomeByFilter, updateIncome };
