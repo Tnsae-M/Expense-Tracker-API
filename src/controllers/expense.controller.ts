@@ -26,8 +26,9 @@ export const newExpense = catchAsync(async (req: Request, res: Response) => {
 // });
 export const getExpenseByFilter = catchAsync(
   async (req: Request, res: Response) => {
+    const id = req.user?.tokenUserId;
     const validFilters = expenseQuerySchema.parse(req.query);
-    const expense = await getExpense(validFilters);
+    const expense = await getExpense(validFilters, id);
     res.status(200).json({
       success: true,
       message: "expense(s) found successfully.",

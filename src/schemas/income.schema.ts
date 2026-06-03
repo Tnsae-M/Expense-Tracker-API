@@ -9,7 +9,7 @@ export const incomeInput = z.object({
 export type incomeInputType = z.infer<typeof incomeInput>;
 export const incomeQuerySchema = z.object({
   id: z.coerce.number().positive().optional(),
-  title: z.string().optional(),
+  description: z.string().optional(),
   userId: z.coerce.number().positive().optional(),
   source: z.string().optional(),
 });

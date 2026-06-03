@@ -36,12 +36,16 @@ async function createExpense(data: expenseInputType): Promise<ExpenseModel> {
 //   }
 //   return expenses;
 // }
-async function getExpense(filters: ExpenseQueryType): Promise<ExpenseModel[]> {
-  const { id, title, userId, categoryId } = filters;
+async function getExpense(
+  filters: ExpenseQueryType,
+  uid: number | undefined,
+): Promise<ExpenseModel[]> {
+  const { id, title, categoryId } = filters;
+  const authUid = Number(uid);
   const expenses = await prisma.expense.findMany({
     where: {
       id: id,
-      userId: userId,
+      userId: authUid,
       categoryId: categoryId,
       title: title
         ? {

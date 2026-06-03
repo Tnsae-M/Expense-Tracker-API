@@ -28,4 +28,33 @@ async function addIncome(
   });
   return newIncome;
 }
-export { addIncome };
+//--------
+async function getIncomeByFilter(
+  filter: IncomeQueryType,
+  uid: number | undefined,
+): Promise<IncomeModel[]> {
+  //handle using userId as a filter later.
+  const { id, source, description } = filter;
+  const authUid = Number(uid);
+  const incomes = await prisma.income.findMany({
+    where: {
+      id: id,
+      userId: authUid,
+      source: source
+        ? {
+            contains: source,
+            mode: "insensitive",
+          }
+        : undefined,
+      description: description
+        ? {
+            contains: description,
+            mode: "insensitive",
+          }
+        : undefined,
+    },
+    orderBy: { date: "desc" },
+  });
+  return incomes;
+}
+export { addIncome, getIncomeByFilter };
