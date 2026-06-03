@@ -344,7 +344,7 @@ export type ExpenseCreateInput = {
   description?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   paymentMethod: string
-  date: Date | string
+  date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutExpensesInput
@@ -357,7 +357,7 @@ export type ExpenseUncheckedCreateInput = {
   description?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   paymentMethod: string
-  date: Date | string
+  date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: number
@@ -395,7 +395,7 @@ export type ExpenseCreateManyInput = {
   description?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   paymentMethod: string
-  date: Date | string
+  date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: number
@@ -581,7 +581,7 @@ export type ExpenseCreateWithoutUserInput = {
   description?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   paymentMethod: string
-  date: Date | string
+  date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.CategoryCreateNestedOneWithoutExpensesInput
@@ -593,7 +593,7 @@ export type ExpenseUncheckedCreateWithoutUserInput = {
   description?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   paymentMethod: string
-  date: Date | string
+  date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   categoryId: number
@@ -646,7 +646,7 @@ export type ExpenseCreateWithoutCategoryInput = {
   description?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   paymentMethod: string
-  date: Date | string
+  date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutExpensesInput
@@ -658,7 +658,7 @@ export type ExpenseUncheckedCreateWithoutCategoryInput = {
   description?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   paymentMethod: string
-  date: Date | string
+  date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: number
@@ -696,7 +696,7 @@ export type ExpenseCreateManyUserInput = {
   description?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   paymentMethod: string
-  date: Date | string
+  date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   categoryId: number
@@ -743,7 +743,7 @@ export type ExpenseCreateManyCategoryInput = {
   description?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   paymentMethod: string
-  date: Date | string
+  date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: number

@@ -312,7 +312,7 @@ export type IncomeCreateInput = {
   source: string
   description?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  date: Date | string
+  date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutIncomesInput
@@ -323,7 +323,7 @@ export type IncomeUncheckedCreateInput = {
   source: string
   description?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  date: Date | string
+  date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: number
@@ -355,7 +355,7 @@ export type IncomeCreateManyInput = {
   source: string
   description?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  date: Date | string
+  date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: number
@@ -482,7 +482,7 @@ export type IncomeCreateWithoutUserInput = {
   source: string
   description?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  date: Date | string
+  date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -492,7 +492,7 @@ export type IncomeUncheckedCreateWithoutUserInput = {
   source: string
   description?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  date: Date | string
+  date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -542,7 +542,7 @@ export type IncomeCreateManyUserInput = {
   source: string
   description?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  date: Date | string
+  date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
