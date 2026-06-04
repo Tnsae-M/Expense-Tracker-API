@@ -40,13 +40,24 @@ async function getExpense(
   filters: ExpenseQueryType,
   uid: number | undefined,
 ): Promise<ExpenseModel[]> {
-  const { id, title, categoryId } = filters;
+  const { id, title, category, limit, page } = filters;
+  const take = Number(limit);
+  let skip = Number(page) - 1 * take;
+  if (skip <= 0) {
+    skip = 0;
+  }
   const authUid = Number(uid);
   const expenses = await prisma.expense.findMany({
+    skip: skip,
+    take: take,
     where: {
       id: id,
       userId: authUid,
-      categoryId: categoryId,
+      category: category
+        ? {
+            name: { equals: category, mode: "insensitive" },
+          }
+        : undefined,
       title: title
         ? {
             contains: title,
@@ -56,21 +67,40 @@ async function getExpense(
     },
     orderBy: { date: "desc" },
   });
-  if (!expenses) {
-    throw new appError("expense not found!", 404);
-  }
+  // if (!expenses) {
+  //   throw new appError("expense not found!", 404);
+  // }
   return expenses;
 }
 async function updateExpense(
   data: expenseInputType,
   id: number,
 ): Promise<ExpenseModel> {
+  //user id must not be updated since only logged in user can update his expense only and not transfer the expense to someone else.
   const checkExpense = await prisma.expense.findUnique({
     where: { id },
   });
   if (!checkExpense) {
     throw new appError("Expense not found!", 404);
   }
+  if (data.categoryId || data.userId) {
+    if (data.userId) {
+      const checkUser = await prisma.user.findUnique({
+        where: { id: data.userId },
+      });
+      if (!checkUser) {
+        throw new appError("the user to update to is not found", 404);
+      }
+    } else {
+      const checkCategory = await prisma.category.findUnique({
+        where: { id: data.categoryId },
+      });
+      if (!checkCategory) {
+        throw new appError("the category to update to is not found", 404);
+      }
+    }
+  }
+
   if (data.date) {
     data.date = new Date(data.date);
   }

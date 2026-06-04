@@ -11,8 +11,9 @@ export const expenseInput = z.object({
 export const expenseQuerySchema = z.object({
   id: z.coerce.number().positive().optional(),
   title: z.string().optional(),
-  userId: z.coerce.number().positive().optional(),
-  categoryId: z.coerce.number().positive().optional(),
+  category: z.coerce.string().optional(),
+  page: z.coerce.number().int().default(1),
+  limit: z.coerce.number().int().default(10),
 });
 
 export type ExpenseQueryType = z.infer<typeof expenseQuerySchema>;
