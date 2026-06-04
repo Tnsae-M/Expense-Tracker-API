@@ -29,11 +29,17 @@ export const getExpenseByFilter = catchAsync(
     const id = req.user?.tokenUserId;
     const validFilters = expenseQuerySchema.parse(req.query);
     const expense = await getExpense(validFilters, id);
+    const currentPage = validFilters.page ?? 1;
+    const limit = validFilters.limit ?? 10;
+    const totalPages = Math.ceil(expense.pageRecords / limit);
     res.status(200).json({
       success: true,
       message: "expense(s) found successfully.",
-      result: expense.length,
-      data: expense,
+      result: expense.expenses.length,
+      currentPage: currentPage,
+      totalPages: totalPages,
+      totalRecords: expense.pageRecords,
+      data: expense.expenses,
     });
   },
 );

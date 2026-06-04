@@ -36,10 +36,7 @@ async function createExpense(data: expenseInputType): Promise<ExpenseModel> {
 //   }
 //   return expenses;
 // }
-async function getExpense(
-  filters: ExpenseQueryType,
-  uid: number | undefined,
-): Promise<ExpenseModel[]> {
+async function getExpense(filters: ExpenseQueryType, uid: number | undefined) {
   const {
     id,
     search,
@@ -52,50 +49,56 @@ async function getExpense(
     minAmount,
   } = filters;
   const take = Number(limit);
-  let skip = Number(page) - 1 * take;
+  let skip = (Number(page) - 1) * take;
   if (skip <= 0) {
     skip = 0;
   }
   const authUid = Number(uid);
-  const expenses = await prisma.expense.findMany({
-    skip: skip,
-    take: take,
-    where: {
-      id: id,
-      userId: authUid,
-      category: category
+  //define where clause for reuse in prisma trx
+  const whereCondition = {
+    id: id,
+    userId: authUid,
+    category: category
+      ? {
+          name: { equals: category, mode: "insensitive" as const },
+        }
+      : undefined,
+    title: search
+      ? {
+          contains: search,
+          mode: "insensitive" as const,
+        }
+      : undefined,
+    date:
+      startDate || endDate
         ? {
-            name: { equals: category, mode: "insensitive" },
+            gte: startDate ? new Date(startDate) : undefined,
+            //the endDate doesn't filter by exact date due to timezoned date input
+            lte: endDate ? new Date(endDate) : undefined,
           }
         : undefined,
-      title: search
+    amount:
+      minAmount || maxAmount
         ? {
-            contains: search,
-            mode: "insensitive",
+            gte: minAmount,
+            lte: maxAmount,
           }
         : undefined,
-      date:
-        startDate || endDate
-          ? {
-              gte: startDate ? new Date(startDate) : undefined,
-              //the endDate doesn't filter by exact date due to timezoned date input
-              lte: endDate ? new Date(endDate) : undefined,
-            }
-          : undefined,
-      amount:
-        minAmount || maxAmount
-          ? {
-              gte: minAmount,
-              lte: maxAmount,
-            }
-          : undefined,
-    },
-    orderBy: { date: "desc" },
-  });
+  };
+  const [expenses, pageRecords] = await prisma.$transaction([
+    prisma.expense.findMany({
+      where: whereCondition,
+      skip: skip,
+      take: take,
+      orderBy: { date: "desc" },
+    }),
+    prisma.expense.count({ where: whereCondition }),
+  ]);
+
   // if (!expenses) {
   //   throw new appError("expense not found!", 404);
   // }
-  return expenses;
+  return { expenses, pageRecords };
 }
 async function updateExpense(
   data: expenseInputType,
