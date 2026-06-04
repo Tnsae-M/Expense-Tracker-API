@@ -14,6 +14,8 @@ export const expenseQuerySchema = z.object({
   category: z.coerce.string().optional(),
   page: z.coerce.number().int().default(1),
   limit: z.coerce.number().int().default(10),
+  startDate: z.coerce.date().optional(),
+  endDate: z.coerce.date().optional(),
 });
 
 export type ExpenseQueryType = z.infer<typeof expenseQuerySchema>;

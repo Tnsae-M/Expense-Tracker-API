@@ -40,7 +40,7 @@ async function getExpense(
   filters: ExpenseQueryType,
   uid: number | undefined,
 ): Promise<ExpenseModel[]> {
-  const { id, title, category, limit, page } = filters;
+  const { id, title, category, limit, page, endDate, startDate } = filters;
   const take = Number(limit);
   let skip = Number(page) - 1 * take;
   if (skip <= 0) {
@@ -64,6 +64,14 @@ async function getExpense(
             mode: "insensitive",
           }
         : undefined,
+      date:
+        startDate || endDate
+          ? {
+              gte: startDate ? new Date(startDate) : undefined,
+              //the endDate doesn't filter by exact date due to timezoned date input
+              lte: endDate ? new Date(endDate) : undefined,
+            }
+          : undefined,
     },
     orderBy: { date: "desc" },
   });
