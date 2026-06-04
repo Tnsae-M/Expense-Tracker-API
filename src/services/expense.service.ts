@@ -42,7 +42,7 @@ async function getExpense(
 ): Promise<ExpenseModel[]> {
   const {
     id,
-    title,
+    search,
     category,
     limit,
     page,
@@ -68,9 +68,9 @@ async function getExpense(
             name: { equals: category, mode: "insensitive" },
           }
         : undefined,
-      title: title
+      title: search
         ? {
-            contains: title,
+            contains: search,
             mode: "insensitive",
           }
         : undefined,

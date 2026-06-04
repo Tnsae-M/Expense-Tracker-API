@@ -10,7 +10,7 @@ export const expenseInput = z.object({
 });
 export const expenseQuerySchema = z.object({
   id: z.coerce.number().positive().optional(),
-  title: z.string().optional(),
+  search: z.string().optional(),
   category: z.coerce.string().optional(),
   page: z.coerce.number().int().default(1),
   limit: z.coerce.number().int().default(10),
