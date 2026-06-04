@@ -36,41 +36,99 @@ async function createExpense(data: expenseInputType): Promise<ExpenseModel> {
 //   }
 //   return expenses;
 // }
-async function getExpense(
-  filters: ExpenseQueryType,
-  uid: number | undefined,
-): Promise<ExpenseModel[]> {
-  const { id, title, categoryId } = filters;
+async function getExpense(filters: ExpenseQueryType, uid: number | undefined) {
+  const {
+    id,
+    search,
+    category,
+    limit,
+    page,
+    endDate,
+    startDate,
+    maxAmount,
+    minAmount,
+  } = filters;
+  const take = Number(limit);
+  let skip = (Number(page) - 1) * take;
+  if (skip <= 0) {
+    skip = 0;
+  }
   const authUid = Number(uid);
-  const expenses = await prisma.expense.findMany({
-    where: {
-      id: id,
-      userId: authUid,
-      categoryId: categoryId,
-      title: title
+  //define where clause for reuse in prisma trx
+  const whereCondition = {
+    id: id,
+    userId: authUid,
+    category: category
+      ? {
+          name: { equals: category, mode: "insensitive" as const },
+        }
+      : undefined,
+    title: search
+      ? {
+          contains: search,
+          mode: "insensitive" as const,
+        }
+      : undefined,
+    date:
+      startDate || endDate
         ? {
-            contains: title,
-            mode: "insensitive",
+            gte: startDate ? new Date(startDate) : undefined,
+            //the endDate doesn't filter by exact date due to timezoned date input
+            lte: endDate ? new Date(endDate) : undefined,
           }
         : undefined,
-    },
-    orderBy: { date: "desc" },
-  });
-  if (!expenses) {
-    throw new appError("expense not found!", 404);
-  }
-  return expenses;
+    amount:
+      minAmount || maxAmount
+        ? {
+            gte: minAmount,
+            lte: maxAmount,
+          }
+        : undefined,
+  };
+  const [expenses, pageRecords] = await prisma.$transaction([
+    prisma.expense.findMany({
+      where: whereCondition,
+      skip: skip,
+      take: take,
+      orderBy: { date: "desc" },
+    }),
+    prisma.expense.count({ where: whereCondition }),
+  ]);
+
+  // if (!expenses) {
+  //   throw new appError("expense not found!", 404);
+  // }
+  return { expenses, pageRecords };
 }
 async function updateExpense(
   data: expenseInputType,
   id: number,
 ): Promise<ExpenseModel> {
+  //user id must not be updated since only logged in user can update his expense only and not transfer the expense to someone else.
   const checkExpense = await prisma.expense.findUnique({
     where: { id },
   });
   if (!checkExpense) {
     throw new appError("Expense not found!", 404);
   }
+  if (data.categoryId || data.userId) {
+    if (data.userId) {
+      const checkUser = await prisma.user.findUnique({
+        where: { id: data.userId },
+      });
+      if (!checkUser) {
+        throw new appError("the user to update to is not found", 404);
+      }
+    } else {
+      const checkCategory = await prisma.category.findUnique({
+        where: { id: data.categoryId },
+      });
+      if (!checkCategory) {
+        throw new appError("the category to update to is not found", 404);
+      }
+    }
+  }
+
   if (data.date) {
     data.date = new Date(data.date);
   }
