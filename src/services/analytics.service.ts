@@ -34,10 +34,12 @@ export const getMonthlyAnalytics = async function (
       where: whereClause,
     }),
   ]);
+  const monthlyIncome = Number(totalIncome._sum.amount);
+  const monthlyExpense = Number(totalExpense._sum.amount);
+  const remainingBalance = monthlyIncome - monthlyExpense;
   return {
-    totalIncome: totalIncome._sum.amount ? Number(totalIncome._sum.amount) : 0,
-    totalExpense: totalExpense._sum.amount
-      ? Number(totalExpense._sum.amount)
-      : 0,
+    totalIncome: monthlyIncome,
+    totalExpense: monthlyExpense,
+    remaining_balance: remainingBalance,
   };
 };
