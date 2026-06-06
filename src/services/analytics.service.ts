@@ -1,16 +1,11 @@
 import { AnalyticsQuerySchema } from "../schemas/analytics.schema";
 import { appError } from "../utils/appError";
 import { prisma } from "../config/lib";
-export const getMonthlyIncome = async function (
+import { start } from "node:repl";
+export const getMonthlyAnalytics = async function (
   filter: AnalyticsQuerySchema,
   userId: number,
 ) {
-  //   const checkUser = await prisma.user.findUnique({
-  //     where: { id: userId },
-  //   });
-  //   if (!checkUser) {
-  //     throw new appError("User not found! please log in and try again", 404);
-  //   }
   let { month, year } = filter;
   month = Number(month);
   year = Number(year);
@@ -22,19 +17,27 @@ export const getMonthlyIncome = async function (
   //     "AND",
   //     endDate.toISOString(),
   //   );
-  const aggregation = await prisma.income.aggregate({
-    _sum: {
-      amount: true,
+  const whereClause = {
+    userId: userId,
+    date: {
+      gte: startDate,
+      lte: endDate,
     },
-    where: {
-      userId: userId,
-      date: {
-        gte: startDate,
-        lte: endDate,
-      },
-    },
-  });
+  };
+  const [totalIncome, totalExpense] = await prisma.$transaction([
+    prisma.income.aggregate({
+      _sum: { amount: true },
+      where: whereClause,
+    }),
+    prisma.expense.aggregate({
+      _sum: { amount: true },
+      where: whereClause,
+    }),
+  ]);
   return {
-    totalIncome: aggregation._sum.amount ? Number(aggregation._sum.amount) : 0,
+    totalIncome: totalIncome._sum.amount ? Number(totalIncome._sum.amount) : 0,
+    totalExpense: totalExpense._sum.amount
+      ? Number(totalExpense._sum.amount)
+      : 0,
   };
 };
