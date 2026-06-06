@@ -5,7 +5,8 @@ export const analyticsQuerySchema = z.object({
     .int()
     .min(1, { message: "month must be between 1 and 12." })
     .max(12, { message: "month must be between 1 and 12." })
-    .optional(), //default(()=>new Date().getMonth()+1)
+    .optional()
+    .default(() => new Date().getMonth() + 1),
   year: z.coerce
     .number()
     .int()
@@ -13,5 +14,6 @@ export const analyticsQuerySchema = z.object({
     .max(2100, { message: "year must be realistic." })
     .optional()
     .default(() => new Date().getFullYear()),
+  category: z.string().optional(),
 });
 export type AnalyticsQuerySchema = z.infer<typeof analyticsQuerySchema>;
