@@ -1,10 +1,6 @@
-import {
-  AnalyticsQuerySchema,
-  analyticsQuerySchema,
-} from "../schemas/analytics.schema";
-import { appError } from "../utils/appError";
+import { AnalyticsQuerySchema } from "../schemas/analytics.schema";
+// import { appError } from "../utils/appError";
 import { prisma } from "../config/lib";
-import { undefined } from "zod";
 export const getMonthlyAnalytics = async function (
   filter: AnalyticsQuerySchema,
   userId: number,
@@ -35,29 +31,44 @@ export const getMonthlyAnalytics = async function (
       lte: endDate,
     },
   };
-  const [totalIncome, totalExpense, categoryGroups, topSpendingCategory] =
-    await prisma.$transaction([
-      prisma.income.aggregate({
-        _sum: { amount: true },
-        where: whereClause,
-      }),
-      prisma.expense.aggregate({
-        _sum: { amount: true },
-        where: whereClause,
-      }),
-      prisma.expense.groupBy({
-        by: ["categoryId"],
-        _sum: { amount: true },
-        where: { ...whereClause, categoryId: targetId },
-      }),
-      prisma.expense.groupBy({
-        by: ["categoryId"],
-        _sum: { amount: true },
-        where: whereClause,
-      }),
-    ]);
+  const [
+    totalIncome,
+    totalExpense,
+    categoryGroups,
+    topSpendingCategory,
+    userBudget,
+  ] = await prisma.$transaction([
+    prisma.income.aggregate({
+      _sum: { amount: true },
+      where: whereClause,
+    }),
+    prisma.expense.aggregate({
+      _sum: { amount: true },
+      where: whereClause,
+    }),
+    prisma.expense.groupBy({
+      by: ["categoryId"],
+      _sum: { amount: true },
+      where: { ...whereClause, categoryId: targetId },
+    }),
+    prisma.expense.groupBy({
+      by: ["categoryId"],
+      _sum: { amount: true },
+      where: whereClause,
+    }),
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: { monthlyBudget: true },
+    }),
+  ]);
+  const budget = Number(userBudget?.monthlyBudget || 0);
   const monthlyIncome = Number(totalIncome._sum.amount);
   const monthlyExpense = Number(totalExpense._sum.amount);
+  const remaining_budget = budget - monthlyExpense;
+  let burnPercentage: number | undefined;
+  if (budget > 0) {
+    burnPercentage = Number(((monthlyExpense / budget) * 100).toFixed(1));
+  } else burnPercentage = 0;
   const categoryMap = new Map(categories.map((c) => [c.id, c.name]));
   const categorySummary = categoryGroups.map((group) => ({
     category: categoryMap.get(group.categoryId) || "Unknown",
@@ -83,6 +94,12 @@ export const getMonthlyAnalytics = async function (
     totalIncome: monthlyIncome,
     totalExpense: monthlyExpense,
     remaining_balance: remainingBalance,
+    budget_comparision: {
+      monthly_budget: budget,
+      actual_spending: monthlyExpense,
+      difference: remaining_budget,
+      spending_percentage: burnPercentage,
+    },
     top_spending_category: topSpendingSummary,
     categorySpending: categorySummary,
   };
