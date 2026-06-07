@@ -22,7 +22,8 @@ export const signUp = catchAsync(async (req: Request, res: Response) => {
 });
 
 const login = catchAsync(async (req: Request, res: Response) => {
-  const user = await loginUser(req.body);
+  const validBody = signInSchema.parse(req.body);
+  const user = await loginUser(validBody);
   if (req.ip) {
     authReqLimiter.resetKey(req.ip);
   }
