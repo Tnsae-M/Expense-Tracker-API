@@ -8,6 +8,7 @@ import userRoutes from "./routes/user.routes";
 import categoryRoutes from "./routes/category.routes";
 import expenseRoutes from "./routes/expense.route";
 import incomeRoutes from "./routes/income.route";
+import analyticsRoute from "./routes/analytics.routes";
 import { globalErrorHandler } from "./middleware/error.guard";
 import { appError } from "./utils/appError";
 const app = express();
@@ -23,6 +24,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/income", incomeRoutes);
+app.use("/api/analytics", analyticsRoute);
 //server status routes
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({
