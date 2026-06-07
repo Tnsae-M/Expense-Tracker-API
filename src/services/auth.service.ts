@@ -3,9 +3,10 @@ import { prisma } from "../config/lib";
 import type { UserModel } from "../../prisma/generated/prisma/models";
 import { signUpDto } from "../dtos/user.dto";
 import { appError } from "../utils/appError";
+import { SignUpSchemaType, SignInSchemaType } from "../schemas/user.schema";
 export type SafeUser = Omit<UserModel, "password">;
 //=================================================================
-async function registerUser(data: signUpDto): Promise<SafeUser> {
+async function registerUser(data: SignUpSchemaType): Promise<SafeUser> {
   const { fullName, username, email, password, monthlyBudget, currency } = data;
   if (!fullName || !username || !email || !password || !monthlyBudget) {
     throw new appError("missing required field(s)!", 400);
@@ -50,10 +51,7 @@ async function registerUser(data: signUpDto): Promise<SafeUser> {
   return newUser;
 }
 //===================================================================
-async function loginUser(data: {
-  emailOrUsername: string;
-  password: string;
-}): Promise<SafeUser> {
+async function loginUser(data: SignInSchemaType): Promise<SafeUser> {
   const { emailOrUsername, password } = data;
   if (!emailOrUsername || !password) {
     throw new appError("missing username/email or password field", 400);
@@ -61,8 +59,8 @@ async function loginUser(data: {
   const checkUser = await prisma.user.findFirst({
     where: {
       OR: [
-        { email: emailOrUsername.toLowerCase().trim() },
-        { username: emailOrUsername.trim() },
+        { email: emailOrUsername.toLowerCase() },
+        { username: emailOrUsername },
       ],
     },
   });
