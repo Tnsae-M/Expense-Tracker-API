@@ -8,9 +8,6 @@ import { UpdateProfileInput } from "../schemas/profile.schema";
 //profile routes
 const getProfile = catchAsync(async (req: Request, res: Response) => {
   const userDataToken = req.user;
-  if (!req.body) {
-    throw new appError("no data provided", 400);
-  }
   if (!userDataToken) {
     throw new appError("user data not found in token", 400);
   }
