@@ -35,6 +35,8 @@ From a product perspective, this stack supports fast iteration and stable API de
 
 Live API: https://expense-tracker-api-ycqe.onrender.com
 
+Hosted on Render for easy cloud deployment and managed runtime.
+
 ## Environment Variables
 
 The API relies on the following environment variables:
