@@ -31,6 +31,42 @@ PostgreSQL offers a scalable relational foundation for expense and income tracki
 
 From a product perspective, this stack supports fast iteration and stable API delivery, which is essential for a finance tool where data integrity and reliable authentication matter most.
 
+## Folder structure
+
+```text
+expense-tracker-API/
+├─ package.json
+├─ readme.md
+├─ tsconfig.json
+├─ prisma/
+│  ├─ schema.prisma
+│  └─ migrations/
+├─ src/
+│  ├─ app.ts
+│  ├─ server.ts
+│  ├─ config/
+│  │  └─ lib.ts
+│  ├─ controllers/
+│  │  ├─ analytics.controller.ts
+│  │  ├─ auth.controller.ts
+│  │  ├─ category.controller.ts
+│  │  ├─ expense.controller.ts
+│  │  ├─ income.controller.ts
+│  │  └─ user.controller.ts
+│  ├─ routes/
+│  │  ├─ analytics.routes.ts
+│  │  ├─ auth.routes.ts
+│  │  ├─ category.routes.ts
+│  │  ├─ expense.route.ts
+│  │  ├─ income.route.ts
+│  │  └─ user.routes.ts
+│  ├─ schemas/
+│  ├─ services/
+│  ├─ utils/
+│  ├─ middleware/
+│  └─ types/
+```
+
 ## Deployment
 
 Live API: https://expense-tracker-api-ycqe.onrender.com
