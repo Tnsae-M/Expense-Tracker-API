@@ -4,7 +4,10 @@ import { prisma } from "../config/lib";
 import { Request, Response } from "express";
 import { hashPassword } from "../utils/password";
 // import { SafeUser } from "../services/auth.service";
-import { UpdateProfileInput } from "../schemas/profile.schema";
+import {
+  UpdateProfileInput,
+  updateProfileSchema,
+} from "../schemas/profile.schema";
 //profile routes
 const getProfile = catchAsync(async (req: Request, res: Response) => {
   const userDataToken = req.user;
@@ -33,7 +36,7 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
   if (!userDataToken) {
     throw new appError("user data not found in token", 400);
   }
-  const validatedData: UpdateProfileInput = req.body;
+  const validatedData = updateProfileSchema.parse(req.body);
   if (Object.keys(validatedData).length === 0) {
     return res.status(200).json({
       success: true,
