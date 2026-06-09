@@ -1,0 +1,441 @@
+{
+  "info": {
+    "_postman_id": "d088c3f0-d289-4eb9-9290-dd9d1280afe3",
+    "name": "expense-tracker-API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46046797"
+  },
+  "item": [
+    {
+      "name": "auth endpoints",
+      "item": [
+        {
+          "name": "log out",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/auth/logout",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "auth", "logout"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "sign in API",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"emailOrUsername\":\"tinsae.mk.official@gmail.com\",\r\n  \"password\":\"!tmt230897\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/auth/login",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "sign up API",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"fullName\":\"Tinsae Melkamu\",\r\n  \"username\":\"Tinsae\",\r\n  \"email\":\"tinsae.mk.official@gmail.com\",\r\n  \"password\":\"tmt230897\",\r\n  \"monthlyBudget\":4500\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/auth/register",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "dashboard API",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"emailOrUsername\":\"tinsae.mk.official@gmail.com\",\r\n  \"password\":\"@!tmt230897\"\r\n}"
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/auth/dashboard",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "auth", "dashboard"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "profile endpoints",
+      "item": [
+        {
+          "name": "update profile API",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\":\"Tinsae1221\",\r\n    \"monthlyBudget\":7000\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/users/me",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "users", "me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get profile API",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"emailOrUsername\":\"tinsae.mk.official@gmail.com\",\r\n  \"password\":\"@!tmt230897\"\r\n}"
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/users/me",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "users", "me"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "expense endpoints",
+      "item": [
+        {
+          "name": "get expenses APIs",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/expenses",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "expenses"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create expense API",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"title\": \"transport 22\",\r\n \"description\": \"paid for transport to 22.\",\r\n  \"amount\": 100,\r\n  \"date\":\"2026-06-12\",\r\n \"paymentMethod\": \"cash\",\r\n  \"categoryId\": 2\r\n}"
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/expenses",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "expenses"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete expenses API",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\":\"transport kaliti\"\r\n}"
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/expenses/7",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "expenses", "7"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "patch expense API",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\":\"transport kaliti\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/expenses/7",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "expenses", "7"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "income endpoints",
+      "item": [
+        {
+          "name": "get income API",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\":\"transport kaliti\"\r\n}"
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/income",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "income"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create income API",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"source\":\"shoe sales\",\r\n    \"description\":\".\",\r\n    \"amount\":250,\r\n    \"date\":\"2026-05-29\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/income",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "income"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update income API",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"source\":\"shoe sales\",\r\n    \"description\":\".\",\r\n    \"amount\":300,\r\n    \"date\":\"2026-05-29\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/income/5",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "income", "5"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete income API",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"source\":\"shoe sales\",\r\n    \"description\":\".\",\r\n    \"amount\":300,\r\n    \"date\":\"2026-05-29\"\r\n}"
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/income/5",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "income", "5"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "category endpoints",
+      "item": [
+        {
+          "name": "get categories API",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\":\"Groceries\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/categories",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "categories"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create category API",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Groceries\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/categories",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "categories"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update categories API",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"groceries\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/categories/1",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "categories", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete category API",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Groceries\"\r\n}"
+            },
+            "url": {
+              "raw": "https://expense-tracker-api-ycqe.onrender.com/api/categories/7",
+              "protocol": "https",
+              "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+              "path": ["api", "categories", "7"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "analytics endpoint",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\"source\":\"ET100:Index fund dividend\"\r\n}"
+        },
+        "url": {
+          "raw": "https://expense-tracker-api-ycqe.onrender.com/api/analytics/summary",
+          "protocol": "https",
+          "host": ["expense-tracker-api-ycqe", "onrender", "com"],
+          "path": ["api", "analytics", "summary"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
