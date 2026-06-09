@@ -2,15 +2,17 @@ import { ExpenseModel } from "../../prisma/generated/prisma/models/Expense";
 import { appError } from "../utils/appError";
 import { prisma } from "../config/lib";
 import { expenseInputType, ExpenseQueryType } from "../schemas/expense.schema";
-async function createExpense(data: expenseInputType): Promise<ExpenseModel> {
+async function createExpense(
+  data: expenseInputType,
+  uid: number,
+): Promise<ExpenseModel> {
   if (!data) {
     throw new appError("missing expected field(s)!", 400);
   }
-  const userId = data.userId;
   //changing checkUser by id to util?
   const checkUser = await prisma.user.findUnique({
     where: {
-      id: userId,
+      id: uid,
     },
   });
   if (!checkUser) {
@@ -24,6 +26,7 @@ async function createExpense(data: expenseInputType): Promise<ExpenseModel> {
     throw new appError("Category not found!", 404);
   }
   data.date = new Date(data.date);
+  data.userId = uid;
   const newExpense = await prisma.expense.create({ data });
   return newExpense;
 }
