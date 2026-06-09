@@ -12,7 +12,7 @@ import analyticsRoute from "./routes/analytics.routes";
 import { globalErrorHandler } from "./middleware/error.guard";
 import { appError } from "./utils/appError";
 const app = express();
-// app.set("trust proxy", 1);
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(helmet());
 app.use(cors()); // or cors({ origin: "http://localhost:3000" }) for specific origin of frontend

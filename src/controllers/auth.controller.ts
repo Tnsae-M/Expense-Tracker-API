@@ -1,11 +1,13 @@
 import { registerUser, loginUser } from "../services/auth.service";
 import { Request, Response } from "express";
+import { signInSchema, signUpSchema } from "../schemas/user.schema";
 import { generateToken } from "../utils/token";
 import { authReqLimiter } from "../utils/rate.limiter";
 import { catchAsync } from "../utils/catch.async";
 import rateLimit from "express-rate-limit";
 export const signUp = catchAsync(async (req: Request, res: Response) => {
-  const newUser = await registerUser(req.body);
+  const validRequestBody = signUpSchema.parse(req.body);
+  const newUser = await registerUser(validRequestBody);
   const accessToken = await generateToken(newUser.id, newUser.email);
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
@@ -20,7 +22,8 @@ export const signUp = catchAsync(async (req: Request, res: Response) => {
 });
 
 const login = catchAsync(async (req: Request, res: Response) => {
-  const user = await loginUser(req.body);
+  const validBody = signInSchema.parse(req.body);
+  const user = await loginUser(validBody);
   if (req.ip) {
     authReqLimiter.resetKey(req.ip);
   }

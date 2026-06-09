@@ -28,8 +28,9 @@ export const GetAllCategories = catchAsync(
 export const UpdateCategory = catchAsync(
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    req.body.id = Number(id);
-    const updatedCategory = await updateCategory(req.body);
+    const cid = Number(id);
+    const { name } = req.body;
+    const updatedCategory = await updateCategory(cid, name);
     res.status(200).json({
       success: true,
       message: "category updated successfully",

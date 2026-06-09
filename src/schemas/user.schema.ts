@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const signUpSchema = z
+export const signUpSchema = z
   .object({
     fullName: z
       .string()
@@ -26,7 +26,7 @@ const signUpSchema = z
       .default("ETB"),
   })
   .strict();
-const signInSchema = z.object({
+export const signInSchema = z.object({
   emailOrUsername: z.string().trim().toLowerCase(),
   password: z
     .string()

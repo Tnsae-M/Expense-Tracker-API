@@ -8,7 +8,8 @@ import {
 } from "../services/expense.service";
 import { expenseQuerySchema } from "../schemas/expense.schema";
 export const newExpense = catchAsync(async (req: Request, res: Response) => {
-  const newExpense = await createExpense(req.body);
+  const id = Number(req.user?.tokenUserId);
+  const newExpense = await createExpense(req.body, id);
   res.status(200).json({
     success: true,
     message: "Expense created successfully",
