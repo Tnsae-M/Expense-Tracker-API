@@ -4,7 +4,7 @@ import { signInSchema, signUpSchema } from "../schemas/user.schema";
 import { generateToken } from "../utils/token";
 import { authReqLimiter } from "../utils/rate.limiter";
 import { catchAsync } from "../utils/catch.async";
-import rateLimit from "express-rate-limit";
+
 export const signUp = catchAsync(async (req: Request, res: Response) => {
   const validRequestBody = signUpSchema.parse(req.body);
   const newUser = await registerUser(validRequestBody);
@@ -12,6 +12,7 @@ export const signUp = catchAsync(async (req: Request, res: Response) => {
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
     sameSite: "strict",
+    secure: true,
     maxAge: 2 * 60 * 60 * 1000, //2hrs
   });
   res.status(201).json({
@@ -31,6 +32,7 @@ const login = catchAsync(async (req: Request, res: Response) => {
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
     sameSite: "strict",
+    secure: true,
     maxAge: 2 * 60 * 60 * 1000, //2hrs
   });
   res.status(200).json({

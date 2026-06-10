@@ -17,7 +17,6 @@ export async function generateToken(
     .setExpirationTime("2h")
     .setIssuedAt()
     .sign(JWT_SECRET);
-
   return token;
 }
 export async function verifyToken(
