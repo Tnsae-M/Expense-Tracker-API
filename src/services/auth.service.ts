@@ -49,9 +49,6 @@ async function registerUser(data: SignUpSchemaType): Promise<SafeUser> {
 //===================================================================
 async function loginUser(data: SignInSchemaType): Promise<SafeUser> {
   const { emailOrUsername, password } = data;
-  if (!emailOrUsername || !password) {
-    throw new appError("missing username/email or password field", 400);
-  }
   const checkUser = await prisma.user.findFirst({
     where: {
       OR: [

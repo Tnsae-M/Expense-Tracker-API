@@ -34,15 +34,6 @@ async function createExpense(
   const newExpense = await prisma.expense.create({ data });
   return newExpense;
 }
-// async function getAllExpenses(
-//   userId: number | undefined,
-// ): Promise<ExpenseModel[]> {
-//   const expenses = await prisma.expense.findMany({ where: { userId: userId } });
-//   if (!expenses) {
-//     throw new appError("no expense is found", 404);
-//   }
-//   return expenses;
-// }
 async function getExpense(filters: ExpenseQueryType, uid: string | undefined) {
   const {
     id,

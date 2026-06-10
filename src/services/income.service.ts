@@ -5,7 +5,7 @@ import { IncomeModel } from "../../prisma/generated/prisma/models";
 
 async function addIncome(
   income: incomeInputType,
-  userId: string | undefined,
+  userId: string,
 ): Promise<IncomeModel> {
   if (!income || Object.keys(income).length === 0) {
     throw new appError("missing required fields", 400);
@@ -19,6 +19,7 @@ async function addIncome(
   if (!user) {
     throw new appError("User not found", 404);
   }
+  income.userId = userId;
   if (income.date) {
     income.date = new Date(income.date);
   }
