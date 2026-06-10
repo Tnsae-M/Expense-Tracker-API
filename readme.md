@@ -61,6 +61,12 @@ expense-tracker-API/
 │  │  ├─ income.route.ts
 │  │  └─ user.routes.ts
 │  ├─ schemas/
+│  │  ├─ analytics.schema.ts
+│  │  ├─ category.schema.ts
+│  │  ├─ expense.schema.ts
+│  │  ├─ income.schema.ts
+│  │  ├─ profile.schema.ts
+│  │  └─ user.schema.ts
 │  ├─ services/
 │  ├─ utils/
 │  ├─ middleware/
