@@ -136,11 +136,13 @@ The API relies on the following environment variables:
 - Zod-powered request validation for reliable input handling.
 - Monthly analytics summary and filterable expense/income endpoints.
 
-## Lessons Learned
+## Challenges & Lessons Learned
 
-- **Type-safe backend design**: TypeScript and Prisma help keep controller, service, and database contracts aligned.
-- **Runtime validation is essential**: Zod reduces bugs by validating external request payloads before business logic runs.
-- **Production-ready security**: adding helmet, rate limiting, and cookie handling made the API more deployment-ready.
+- **Securing Direct Object References (IDOR):** I initially only queried expenses by their `id` when updating or deleting. I realized this allowed any authenticated user to modify someone else's expense if they guessed the ID. I fixed this by ensuring `userId` is strictly checked alongside the resource `id` in all database mutations.
+- **Data Privacy in Updates:** When updating a user profile, Prisma returns the entire updated object by default. I accidentally leaked the hashed password in the JSON response before catching it. I learned to use JavaScript object destructuring (`const { password, ...safeUser } = user`) to ensure sensitive fields never leave the server.
+- **Predictable IDs vs Security:** I originally used auto-incrementing integers for User IDs. I realized this made it easy for attackers to guess user IDs and know exactly how many users my app has. I migrated the schema to use `UUIDs` for user identities, learning how to handle relational schema changes in Prisma.
+- **Type Safety in Express Middleware:** Wrapping route handlers in a `catchAsync` function is a great pattern, but I initially typed the parameter as `Function`, which bypassed TypeScript's checks. I learned to define an explicit `asyncReqHandler` type, ensuring that I get full IDE intellisense and compile-time safety across all my controllers.
+- **Database Scaling Basics:** I learned that foreign keys aren't automatically indexed in PostgreSQL. Since the API constantly filters expenses and incomes by `userId`, I added `@@index([userId])` to the Prisma schema to prevent full-table scans and ensure the queries remain fast as the database grows.
 
 ## Local Setup
 
