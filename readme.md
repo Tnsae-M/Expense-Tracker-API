@@ -99,7 +99,6 @@ The API relies on the following environment variables:
 - `POST /api/auth/register` - Register a new user.
 - `POST /api/auth/login` - Login and receive a cookie-based JWT.
 - `POST /api/auth/logout` - Logout and clear the auth cookie.
-- `GET /api/auth/dashboard` - Protected dashboard route.
 
 ### Users (`/api/users`)
 

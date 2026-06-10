@@ -42,10 +42,9 @@ export const deleteCategories = catchAsync(
   async (req: Request, res: Response) => {
     const id = Number(req.params.id);
     const deletedCategory = await deleteCategory(id);
-    res.status(200).json({
+    res.status(204).json({
       success: true,
       message: "category deleted successfully",
-      data: deletedCategory,
     });
   },
 );

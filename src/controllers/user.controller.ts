@@ -50,12 +50,11 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
     where: { id: userDataToken.tokenUserId },
     data: validatedData,
   });
-  // const { password: dbPassword, ...SafeUser } = currentUser;
+  const { password: dbPassword, ...SafeUser } = currentUser;
   return res.status(200).json({
     success: true,
     message: "profile updated successfully",
-    profile: currentUser,
+    profile: SafeUser,
   });
-  // no check if password is the same logic before updating password.
 });
 export { getProfile, updateProfile };

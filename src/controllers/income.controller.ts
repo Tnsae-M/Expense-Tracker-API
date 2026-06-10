@@ -50,10 +50,9 @@ const deleteIncomeController = catchAsync(
     const id = Number(req.params.id);
     const uid = Number(req.user?.tokenUserId);
     const deleteInc = await deleteIncome(id, uid);
-    res.status(201).json({
+    res.status(204).json({
       success: true,
       message: "income deleted successfully.",
-      data: deleteInc,
     });
   },
 );

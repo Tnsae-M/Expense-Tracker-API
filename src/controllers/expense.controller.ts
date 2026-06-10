@@ -10,7 +10,7 @@ import { expenseQuerySchema } from "../schemas/expense.schema";
 export const newExpense = catchAsync(async (req: Request, res: Response) => {
   const id = Number(req.user?.tokenUserId);
   const newExpense = await createExpense(req.body, id);
-  res.status(200).json({
+  res.status(201).json({
     success: true,
     message: "Expense created successfully",
     data: newExpense,
@@ -58,10 +58,9 @@ export const deleteExpenseById = catchAsync(
     const expenseId = Number(req.params.id);
     const uid = Number(req.user?.tokenUserId);
     const deletedExp = await deleteExpense(expenseId, uid);
-    res.status(200).json({
+    res.status(204).json({
       success: true,
       message: "Expense deleted successfully",
-      data: deletedExp,
     });
   },
 );
