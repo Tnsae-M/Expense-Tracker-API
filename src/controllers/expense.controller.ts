@@ -6,10 +6,11 @@ import {
   getExpense,
   deleteExpense,
 } from "../services/expense.service";
-import { expenseQuerySchema } from "../schemas/expense.schema";
+import { expenseInput, expenseQuerySchema } from "../schemas/expense.schema";
 export const newExpense = catchAsync(async (req: Request, res: Response) => {
   const id = req.user?.tokenUserId!;
-  const newExpense = await createExpense(req.body, id);
+  const validData = expenseInput.parse(req.body);
+  const newExpense = await createExpense(validData, id);
   res.status(201).json({
     success: true,
     message: "Expense created successfully",

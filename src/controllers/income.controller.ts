@@ -32,7 +32,7 @@ const updateIncomeController = catchAsync(
     const id = Number(req.params.id);
     const uid = req.user?.tokenUserId!;
     if (Object.keys(req.body).length === 0) {
-      return res.status(201).json({
+      return res.status(200).json({
         success: true,
         message: "No changes to update",
       });

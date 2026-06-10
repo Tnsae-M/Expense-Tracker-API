@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import morgan from "morgan";
 import { globalLimiter } from "./utils/rate.limiter";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
@@ -16,6 +17,7 @@ app.set("trust proxy", 1);
 app.use(express.json());
 app.use(helmet());
 app.use(cors()); // or cors({ origin: "http://localhost:3000" }) for specific origin of frontend
+app.use(morgan("dev"));
 app.use(globalLimiter);
 app.use(cookieParser());
 //defined routes

@@ -76,7 +76,7 @@ expense-tracker-API/
 ## Deployment
 
 Live API: https://expense-tracker-api-ycqe.onrender.com
-
+Live postman collection link: https://documenter.getpostman.com/view/46046797/2sBXwsKpQx
 Hosted on Render for easy cloud deployment and managed runtime.
 
 ## Environment Variables
