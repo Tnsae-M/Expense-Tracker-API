@@ -101,33 +101,22 @@ async function updateExpense(
   uid: string,
 ): Promise<ExpenseModel> {
   //user id must not be updated since only logged in user can update his expense only and not transfer the expense to someone else.
+  const checkCategory = await prisma.category.findUnique({
+    where: { id: data.categoryId },
+  });
+  if (!checkCategory) {
+    throw new appError("the category to update to is not found", 404);
+  }
   const checkExpense = await prisma.expense.findUnique({
     where: { id: id, userId: uid },
   });
   if (!checkExpense) {
     throw new appError("Expense not found!", 404);
   }
-  if (data.categoryId || data.userId) {
-    if (data.userId) {
-      const checkUser = await prisma.user.findUnique({
-        where: { id: data.userId },
-      });
-      if (!checkUser) {
-        throw new appError("the user to update to is not found", 404);
-      }
-    } else {
-      const checkCategory = await prisma.category.findUnique({
-        where: { id: data.categoryId },
-      });
-      if (!checkCategory) {
-        throw new appError("the category to update to is not found", 404);
-      }
-    }
-  }
-
   if (data.date) {
     data.date = new Date(data.date);
   }
+
   const updatedExpense = await prisma.expense.update({
     where: { id: id, userId: uid },
     data,
