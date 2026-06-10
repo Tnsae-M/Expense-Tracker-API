@@ -106,10 +106,11 @@ async function getExpense(filters: ExpenseQueryType, uid: number | undefined) {
 async function updateExpense(
   data: expenseInputType,
   id: number,
+  uid: number,
 ): Promise<ExpenseModel> {
   //user id must not be updated since only logged in user can update his expense only and not transfer the expense to someone else.
   const checkExpense = await prisma.expense.findUnique({
-    where: { id },
+    where: { id: id, userId: uid },
   });
   if (!checkExpense) {
     throw new appError("Expense not found!", 404);
@@ -135,24 +136,22 @@ async function updateExpense(
   if (data.date) {
     data.date = new Date(data.date);
   }
-
-  console.log(data.date);
   const updatedExpense = await prisma.expense.update({
-    where: { id },
+    where: { id: id, userId: uid },
     data,
   });
   return updatedExpense;
 }
 
-async function deleteExpense(id: number): Promise<ExpenseModel> {
+async function deleteExpense(id: number, uid: number): Promise<ExpenseModel> {
   const checkExpense = await prisma.expense.findUnique({
-    where: { id },
+    where: { id: id, userId: uid },
   });
   if (!checkExpense) {
     throw new appError("Expense to delete not found!", 404);
   }
   const deletedExpense = await prisma.expense.delete({
-    where: { id },
+    where: { id: id, userId: uid },
   });
   return deletedExpense;
 }

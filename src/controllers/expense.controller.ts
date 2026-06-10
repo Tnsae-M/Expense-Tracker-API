@@ -16,15 +16,6 @@ export const newExpense = catchAsync(async (req: Request, res: Response) => {
     data: newExpense,
   });
 });
-// export const getAllExpense = catchAsync(async (req: Request, res: Response) => {
-//   const id = req.user?.tokenUserId;
-//   const expenses = await getAllExpenses(id);
-//   res.status(201).json({
-//     success: true,
-//     message: "expenses retrieved successfully.",
-//     data: expenses,
-//   });
-// });
 export const getExpenseByFilter = catchAsync(
   async (req: Request, res: Response) => {
     const id = req.user?.tokenUserId;
@@ -47,13 +38,14 @@ export const getExpenseByFilter = catchAsync(
 export const updateExpenseById = catchAsync(
   async (req: Request, res: Response) => {
     const expenseId = Number(req.params.id);
+    const uid = Number(req.user?.tokenUserId);
     if (Object.keys(req.body).length === 0) {
       return res.status(200).json({
         success: true,
         message: "No changes detected, Expense remains unchanged",
       });
     }
-    const updatedExpense = await updateExpense(req.body, expenseId);
+    const updatedExpense = await updateExpense(req.body, expenseId, uid);
     res.status(200).json({
       success: true,
       message: "Expense updated successfully",
@@ -64,7 +56,8 @@ export const updateExpenseById = catchAsync(
 export const deleteExpenseById = catchAsync(
   async (req: Request, res: Response) => {
     const expenseId = Number(req.params.id);
-    const deletedExp = await deleteExpense(expenseId);
+    const uid = Number(req.user?.tokenUserId);
+    const deletedExp = await deleteExpense(expenseId, uid);
     res.status(200).json({
       success: true,
       message: "Expense deleted successfully",

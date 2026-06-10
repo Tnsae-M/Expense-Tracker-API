@@ -1,7 +1,6 @@
 import { hashPassword, comparePassword } from "../utils/password";
 import { prisma } from "../config/lib";
 import type { UserModel } from "../../prisma/generated/prisma/models";
-import { signUpDto } from "../dtos/user.dto";
 import { appError } from "../utils/appError";
 import { SignUpSchemaType, SignInSchemaType } from "../schemas/user.schema";
 export type SafeUser = Omit<UserModel, "password">;
