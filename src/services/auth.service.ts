@@ -28,10 +28,10 @@ async function registerUser(data: SignUpSchemaType): Promise<SafeUser> {
   const newUser = await prisma.user.create({
     data: {
       fullName: fullName,
-      email: email.toLocaleLowerCase().trim(),
-      username: username.trim(),
+      email: email,
+      username: username,
       password: hashedPassword,
-      monthlyBudget: Number(monthlyBudget),
+      monthlyBudget: monthlyBudget,
       currency: currency || "ETB",
     },
     select: {

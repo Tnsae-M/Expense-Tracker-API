@@ -26,7 +26,7 @@ app.use("/api/v1/expenses", expenseRoutes);
 app.use("/api/v1/income", incomeRoutes);
 app.use("/api/v1/analytics", analyticsRoute);
 //server status routes
-app.get("/", (req: Request, res: Response) => {
+app.get("/health", (req: Request, res: Response) => {
   res.status(200).json({
     message: "Server is running",
   });

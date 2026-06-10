@@ -2,7 +2,7 @@
 
 ## Base Routes
 
-- `GET /` - Server status
+- `GET /health` - Server status
 - `GET /start` - Welcome message
 
 ## Authentication

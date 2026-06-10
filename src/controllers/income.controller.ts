@@ -30,7 +30,7 @@ const getIncomeController = catchAsync(async (req: Request, res: Response) => {
 const updateIncomeController = catchAsync(
   async (req: Request, res: Response) => {
     const id = Number(req.params.id);
-    const uid = Number(req.user?.tokenUserId);
+    const uid = req.user?.tokenUserId;
     if (Object.keys(req.body).length === 0) {
       return res.status(201).json({
         success: true,
@@ -48,7 +48,7 @@ const updateIncomeController = catchAsync(
 const deleteIncomeController = catchAsync(
   async (req: Request, res: Response) => {
     const id = Number(req.params.id);
-    const uid = Number(req.user?.tokenUserId);
+    const uid = req.user?.tokenUserId;
     const deleteInc = await deleteIncome(id, uid);
     res.status(204).json({
       success: true,

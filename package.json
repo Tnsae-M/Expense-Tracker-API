@@ -2,12 +2,15 @@
   "name": "expense-tracker-api",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "dist/server.js",
   "scripts": {
     "test": "tsx",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js"
+  },
+  "engines": {
+    "node": ""
   },
   "keywords": [],
   "author": "",

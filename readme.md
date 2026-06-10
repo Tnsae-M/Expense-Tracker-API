@@ -91,7 +91,7 @@ The API relies on the following environment variables:
 
 ### Server health
 
-- `GET /` - Server status.
+- `GET /health` - Server status.
 - `GET /start` - Welcome message.
 
 ### Authentication (`/api/auth`)
@@ -147,6 +147,8 @@ The API relies on the following environment variables:
 ```bash
 npm install
 npm run dev
+npx prisma migrate dev
+npx prisma generate
 ```
 
 Then visit `http://localhost:<PORT>`.

@@ -5,7 +5,7 @@ export const expenseInput = z.object({
   amount: z.number(),
   paymentMethod: z.string(),
   date: z.coerce.date().default(new Date()),
-  userId: z.number().positive(),
+  userId: z.string(),
   categoryId: z.number().positive(),
 });
 export const expenseQuerySchema = z.object({

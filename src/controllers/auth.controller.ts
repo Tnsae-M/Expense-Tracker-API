@@ -12,7 +12,7 @@ export const signUp = catchAsync(async (req: Request, res: Response) => {
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
     sameSite: "strict",
-    secure: true,
+    secure: false, //true for deployment
     maxAge: 2 * 60 * 60 * 1000, //2hrs
   });
   res.status(201).json({
@@ -32,7 +32,7 @@ const login = catchAsync(async (req: Request, res: Response) => {
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
     sameSite: "strict",
-    secure: true,
+    secure: false, //true for deployment
     maxAge: 2 * 60 * 60 * 1000, //2hrs
   });
   res.status(200).json({

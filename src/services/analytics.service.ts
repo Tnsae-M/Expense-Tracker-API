@@ -2,7 +2,7 @@ import { AnalyticsQuerySchema } from "../schemas/analytics.schema";
 import { prisma } from "../config/lib";
 export const getMonthlyAnalytics = async function (
   filter: AnalyticsQuerySchema,
-  userId: number,
+  userId: string,
 ) {
   let { month, year, category } = filter;
   month = Number(month);

@@ -5,7 +5,7 @@ import { IncomeModel } from "../../prisma/generated/prisma/models";
 
 async function addIncome(
   income: incomeInputType,
-  userId: number | undefined,
+  userId: string | undefined,
 ): Promise<IncomeModel> {
   if (!income || Object.keys(income).length === 0) {
     throw new appError("missing required fields", 400);
@@ -19,7 +19,6 @@ async function addIncome(
   if (!user) {
     throw new appError("User not found", 404);
   }
-  income.userId = Number(userId);
   if (income.date) {
     income.date = new Date(income.date);
   }
@@ -31,15 +30,14 @@ async function addIncome(
 //--------
 async function getIncomeByFilter(
   filter: IncomeQueryType,
-  uid: number | undefined,
+  uid: string | undefined,
 ): Promise<IncomeModel[]> {
   //handle using userId as a filter later.
   const { id, source, description } = filter;
-  const authUid = Number(uid);
   const incomes = await prisma.income.findMany({
     where: {
       id: id,
-      userId: authUid,
+      userId: uid,
       source: source
         ? {
             contains: source,
@@ -60,7 +58,7 @@ async function getIncomeByFilter(
 async function updateIncome(
   data: Partial<incomeInputType>,
   id: number,
-  uid: number,
+  uid: string,
 ): Promise<IncomeModel> {
   const income = await prisma.income.findUnique({
     where: {
@@ -82,7 +80,7 @@ async function updateIncome(
   });
   return updatedIncome;
 }
-async function deleteIncome(id: number, userId: number): Promise<IncomeModel> {
+async function deleteIncome(id: number, userId: string): Promise<IncomeModel> {
   const income = await prisma.income.findUnique({
     where: { id: id, userId: userId },
   });
