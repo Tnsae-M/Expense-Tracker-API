@@ -7,9 +7,6 @@ export type SafeUser = Omit<UserModel, "password">;
 //=================================================================
 async function registerUser(data: SignUpSchemaType): Promise<SafeUser> {
   const { fullName, username, email, password, monthlyBudget, currency } = data;
-  if (!fullName || !username || !email || !password || !monthlyBudget) {
-    throw new appError("missing required field(s)!", 400);
-  }
   const checkByEmail = await prisma.user.findFirst({
     where: {
       email: email.toLocaleLowerCase().trim(),
