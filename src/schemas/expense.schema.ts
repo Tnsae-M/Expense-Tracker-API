@@ -22,3 +22,5 @@ export const expenseQuerySchema = z.object({
 
 export type ExpenseQueryType = z.infer<typeof expenseQuerySchema>;
 export type expenseInputType = z.infer<typeof expenseInput>;
+export const ExpenseUpdateSchema = expenseInput.partial();
+export type expenseUpdateType = z.infer<typeof ExpenseUpdateSchema>;

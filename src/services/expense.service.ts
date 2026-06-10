@@ -1,7 +1,11 @@
 import { ExpenseModel } from "../../prisma/generated/prisma/models/Expense";
 import { appError } from "../utils/appError";
 import { prisma } from "../config/lib";
-import { expenseInputType, ExpenseQueryType } from "../schemas/expense.schema";
+import {
+  expenseInputType,
+  ExpenseQueryType,
+  expenseUpdateType,
+} from "../schemas/expense.schema";
 async function createExpense(
   data: expenseInputType,
   uid: number,
@@ -98,13 +102,10 @@ async function getExpense(filters: ExpenseQueryType, uid: number | undefined) {
     prisma.expense.count({ where: whereCondition }),
   ]);
 
-  // if (!expenses) {
-  //   throw new appError("expense not found!", 404);
-  // }
   return { expenses, pageRecords };
 }
 async function updateExpense(
-  data: expenseInputType,
+  data: expenseUpdateType,
   id: number,
   uid: number,
 ): Promise<ExpenseModel> {
