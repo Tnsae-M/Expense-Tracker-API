@@ -19,12 +19,12 @@ app.use(cors()); // or cors({ origin: "http://localhost:3000" }) for specific or
 app.use(globalLimiter);
 app.use(cookieParser());
 //defined routes
-app.use("/api/users", userRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/categories", categoryRoutes);
-app.use("/api/expenses", expenseRoutes);
-app.use("/api/income", incomeRoutes);
-app.use("/api/analytics", analyticsRoute);
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/categories", categoryRoutes);
+app.use("/api/v1/expenses", expenseRoutes);
+app.use("/api/v1/income", incomeRoutes);
+app.use("/api/v1/analytics", analyticsRoute);
 //server status routes
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({
