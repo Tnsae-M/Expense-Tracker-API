@@ -9,7 +9,7 @@ import {
 import { incomeQuerySchema } from "../schemas/income.schema";
 
 const addIncomeController = catchAsync(async (req: Request, res: Response) => {
-  const id = req.user?.tokenUserId;
+  const id = req.user?.tokenUserId!;
   const income = await addIncome(req.body, id);
   res.status(201).json({
     success: true,
@@ -30,7 +30,7 @@ const getIncomeController = catchAsync(async (req: Request, res: Response) => {
 const updateIncomeController = catchAsync(
   async (req: Request, res: Response) => {
     const id = Number(req.params.id);
-    const uid = req.user?.tokenUserId;
+    const uid = req.user?.tokenUserId!;
     if (Object.keys(req.body).length === 0) {
       return res.status(201).json({
         success: true,
@@ -48,12 +48,9 @@ const updateIncomeController = catchAsync(
 const deleteIncomeController = catchAsync(
   async (req: Request, res: Response) => {
     const id = Number(req.params.id);
-    const uid = req.user?.tokenUserId;
-    const deleteInc = await deleteIncome(id, uid);
-    res.status(204).json({
-      success: true,
-      message: "income deleted successfully.",
-    });
+    const uid = req.user?.tokenUserId!;
+    await deleteIncome(id, uid);
+    res.status(204).send();
   },
 );
 export {

@@ -46,6 +46,7 @@ const logout = catchAsync(async (req: Request, res: Response) => {
   res.clearCookie("accessToken", {
     httpOnly: true,
     sameSite: "strict",
+    secure: process.env.NODE_ENV === "Production",
     path: "/",
   });
   res.status(200).json({

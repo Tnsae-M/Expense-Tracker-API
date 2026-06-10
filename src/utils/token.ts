@@ -5,8 +5,9 @@ export interface TokenPayload extends JWTPayload {
   userId: string;
   email: string;
 }
+if (!process.env.JWT_SECRET)
+  throw new Error("JWT_SECRET env variable is not set.");
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
-if (!JWT_SECRET) throw new Error("JWT_SECRET env variable is not set.");
 
 export async function generateToken(
   userId: string,
