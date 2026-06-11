@@ -5,6 +5,9 @@
   "main": "dist/server.js",
   "scripts": {
     "test": "vitest",
+    "test:unit": "vitest run tests/unit",
+    "test:integrated": "vitest run tests/integrated",
+    "test:run": "vitest run",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js"
