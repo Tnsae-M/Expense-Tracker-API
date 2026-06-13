@@ -7,7 +7,7 @@ describe("User Integration - fetch & update profile", () => {
   let createdUserId: string | null = null;
   let authCookie: string;
   const password = "IntegrationPass123!";
-  const unique = Date.now();
+  const unique = Date.now() + Math.floor(Math.random() * 10000);
   const testEmail = `user_integration+${unique}@example.com`;
   const testUsername = `usr_int_${String(unique).slice(-8)}`;
 
