@@ -29,9 +29,13 @@ async function createExpense(
   if (!checkCategory) {
     throw new appError("Category not found!", 404);
   }
-  data.date = new Date(data.date);
-  data.userId = uid;
-  const newExpense = await prisma.expense.create({ data });
+  const newExpense = await prisma.expense.create({
+    data: {
+      ...data,
+      date: new Date(data.date),
+      userId: uid,
+    },
+  });
   return newExpense;
 }
 async function getExpense(filters: ExpenseQueryType, uid: string | undefined) {
@@ -96,17 +100,10 @@ async function getExpense(filters: ExpenseQueryType, uid: string | undefined) {
   return { expenses, pageRecords };
 }
 async function updateExpense(
-  data: expenseUpdateType,
+  data: Partial<expenseUpdateType>,
   id: number,
   uid: string,
 ): Promise<ExpenseModel> {
-  //user id must not be updated since only logged in user can update his expense only and not transfer the expense to someone else.
-  const checkCategory = await prisma.category.findUnique({
-    where: { id: data.categoryId },
-  });
-  if (!checkCategory) {
-    throw new appError("the category to update to is not found", 404);
-  }
   const checkExpense = await prisma.expense.findUnique({
     where: { id: id, userId: uid },
   });

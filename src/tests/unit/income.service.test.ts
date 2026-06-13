@@ -28,17 +28,47 @@ describe("Income Service", () => {
 
   describe("addIncome", () => {
     test("should add income successfully", async () => {
-      vi.mocked(prisma.user.findUnique).mockResolvedValue({ id: "user-123" } as never);
-      const mockIncome = { id: 1, amount: 500, source: "Salary", userId: "user-123", date: new Date() };
+      vi.mocked(prisma.user.findUnique).mockResolvedValue({
+        id: "user-123",
+      } as never);
+      const mockIncome = {
+        id: 1,
+        amount: 500,
+        source: "Salary",
+        description: "Monthly salary",
+        userId: "user-123",
+        date: new Date("2023-11-01"),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
       vi.mocked(prisma.income.create).mockResolvedValue(mockIncome as never);
 
-      const result = await addIncome({ amount: 500, source: "Salary", date: "2023-11-01" }, "user-123");
+      const result = await addIncome(
+        {
+          amount: 500,
+          source: "Salary",
+          description: "Monthly salary",
+          userId: "user-123",
+          date: new Date("2023-11-01"),
+        },
+        "user-123",
+      );
       expect(result).toEqual(mockIncome);
     });
 
     test("should throw error if user not found", async () => {
       vi.mocked(prisma.user.findUnique).mockResolvedValue(null);
-      await expect(addIncome({ amount: 500, source: "Salary" }, "user-123")).rejects.toThrow(new appError("User not found", 404));
+      await expect(
+        addIncome(
+          {
+            amount: 500,
+            source: "Salary",
+            description: "Monthly income",
+            userId: "user-123",
+          },
+          "user-123",
+        ),
+      ).rejects.toThrow(new appError("User not found", 404));
     });
   });
 
@@ -54,18 +84,41 @@ describe("Income Service", () => {
 
   describe("updateIncome", () => {
     test("should update income successfully", async () => {
-      vi.mocked(prisma.income.findUnique).mockResolvedValue({ id: 1, userId: "user-123" } as never);
-      const mockUpdated = { id: 1, amount: 600, source: "Bonus" };
+      vi.mocked(prisma.income.findUnique).mockResolvedValue({
+        id: 1,
+        userId: "user-123",
+      } as never);
+      const mockUpdated = {
+        id: 1,
+        amount: 600,
+        source: "Bonus",
+        description: "Annual bonus",
+        userId: "user-123",
+        date: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
       vi.mocked(prisma.income.update).mockResolvedValue(mockUpdated as never);
 
-      const result = await updateIncome({ amount: 600, source: "Bonus" }, 1, "user-123");
+      const result = await updateIncome(
+        {
+          amount: 600,
+          source: "Bonus",
+          description: "Annual bonus",
+        },
+        1,
+        "user-123",
+      );
       expect(result).toEqual(mockUpdated);
     });
   });
 
   describe("deleteIncome", () => {
     test("should delete income successfully", async () => {
-      vi.mocked(prisma.income.findUnique).mockResolvedValue({ id: 1, userId: "user-123" } as never);
+      vi.mocked(prisma.income.findUnique).mockResolvedValue({
+        id: 1,
+        userId: "user-123",
+      } as never);
       const mockDeleted = { id: 1 };
       vi.mocked(prisma.income.delete).mockResolvedValue(mockDeleted as never);
 
