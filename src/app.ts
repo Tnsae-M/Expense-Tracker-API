@@ -2,12 +2,13 @@ import express, { Request, Response } from "express";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import morgan from "morgan";
 import { globalLimiter } from "./utils/rate.limiter";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import categoryRoutes from "./routes/category.routes";
-import expenseRoutes from "./routes/expense.route";
-import incomeRoutes from "./routes/income.route";
+import expenseRoutes from "./routes/expense.routes";
+import incomeRoutes from "./routes/income.routes";
 import analyticsRoute from "./routes/analytics.routes";
 import { globalErrorHandler } from "./middleware/error.guard";
 import { appError } from "./utils/appError";
@@ -16,17 +17,18 @@ app.set("trust proxy", 1);
 app.use(express.json());
 app.use(helmet());
 app.use(cors()); // or cors({ origin: "http://localhost:3000" }) for specific origin of frontend
+app.use(morgan("dev"));
 app.use(globalLimiter);
 app.use(cookieParser());
 //defined routes
-app.use("/api/users", userRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/categories", categoryRoutes);
-app.use("/api/expenses", expenseRoutes);
-app.use("/api/income", incomeRoutes);
-app.use("/api/analytics", analyticsRoute);
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/categories", categoryRoutes);
+app.use("/api/v1/expenses", expenseRoutes);
+app.use("/api/v1/income", incomeRoutes);
+app.use("/api/v1/analytics", analyticsRoute);
 //server status routes
-app.get("/", (req: Request, res: Response) => {
+app.get("/health", (req: Request, res: Response) => {
   res.status(200).json({
     message: "Server is running",
   });

@@ -4,13 +4,13 @@ export const incomeInput = z.object({
   source: z.string().max(15, "source can't be more than 15 chars"),
   amount: z.number().positive("amount must be a positive number"),
   date: z.coerce.date().default(new Date()).optional(),
-  userId: z.number().positive(),
+  userId: z.string(),
 });
 export type incomeInputType = z.infer<typeof incomeInput>;
 export const incomeQuerySchema = z.object({
   id: z.coerce.number().positive().optional(),
   description: z.string().optional(),
-  userId: z.coerce.number().positive().optional(),
+  userId: z.string().optional(),
   source: z.string().optional(),
 });
 export type IncomeQueryType = z.infer<typeof incomeQuerySchema>;

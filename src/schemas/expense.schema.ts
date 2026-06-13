@@ -5,7 +5,7 @@ export const expenseInput = z.object({
   amount: z.number(),
   paymentMethod: z.string(),
   date: z.coerce.date().default(new Date()),
-  userId: z.number().positive(),
+  userId: z.string(),
   categoryId: z.number().positive(),
 });
 export const expenseQuerySchema = z.object({
@@ -22,3 +22,5 @@ export const expenseQuerySchema = z.object({
 
 export type ExpenseQueryType = z.infer<typeof expenseQuerySchema>;
 export type expenseInputType = z.infer<typeof expenseInput>;
+export const ExpenseUpdateSchema = expenseInput.partial();
+export type expenseUpdateType = z.infer<typeof ExpenseUpdateSchema>;

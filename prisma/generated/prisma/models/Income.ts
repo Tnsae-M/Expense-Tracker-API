@@ -29,13 +29,11 @@ export type AggregateIncome = {
 export type IncomeAvgAggregateOutputType = {
   id: number | null
   amount: runtime.Decimal | null
-  userId: number | null
 }
 
 export type IncomeSumAggregateOutputType = {
   id: number | null
   amount: runtime.Decimal | null
-  userId: number | null
 }
 
 export type IncomeMinAggregateOutputType = {
@@ -46,7 +44,7 @@ export type IncomeMinAggregateOutputType = {
   date: Date | null
   createdAt: Date | null
   updatedAt: Date | null
-  userId: number | null
+  userId: string | null
 }
 
 export type IncomeMaxAggregateOutputType = {
@@ -57,7 +55,7 @@ export type IncomeMaxAggregateOutputType = {
   date: Date | null
   createdAt: Date | null
   updatedAt: Date | null
-  userId: number | null
+  userId: string | null
 }
 
 export type IncomeCountAggregateOutputType = {
@@ -76,13 +74,11 @@ export type IncomeCountAggregateOutputType = {
 export type IncomeAvgAggregateInputType = {
   id?: true
   amount?: true
-  userId?: true
 }
 
 export type IncomeSumAggregateInputType = {
   id?: true
   amount?: true
-  userId?: true
 }
 
 export type IncomeMinAggregateInputType = {
@@ -213,7 +209,7 @@ export type IncomeGroupByOutputType = {
   date: Date
   createdAt: Date
   updatedAt: Date
-  userId: number
+  userId: string
   _count: IncomeCountAggregateOutputType | null
   _avg: IncomeAvgAggregateOutputType | null
   _sum: IncomeSumAggregateOutputType | null
@@ -247,7 +243,7 @@ export type IncomeWhereInput = {
   date?: Prisma.DateTimeFilter<"Income"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Income"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Income"> | Date | string
-  userId?: Prisma.IntFilter<"Income"> | number
+  userId?: Prisma.StringFilter<"Income"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
@@ -274,7 +270,7 @@ export type IncomeWhereUniqueInput = Prisma.AtLeast<{
   date?: Prisma.DateTimeFilter<"Income"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Income"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Income"> | Date | string
-  userId?: Prisma.IntFilter<"Income"> | number
+  userId?: Prisma.StringFilter<"Income"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
@@ -305,7 +301,7 @@ export type IncomeScalarWhereWithAggregatesInput = {
   date?: Prisma.DateTimeWithAggregatesFilter<"Income"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Income"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Income"> | Date | string
-  userId?: Prisma.IntWithAggregatesFilter<"Income"> | number
+  userId?: Prisma.StringWithAggregatesFilter<"Income"> | string
 }
 
 export type IncomeCreateInput = {
@@ -326,7 +322,7 @@ export type IncomeUncheckedCreateInput = {
   date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  userId: number
+  userId: string
 }
 
 export type IncomeUpdateInput = {
@@ -347,7 +343,7 @@ export type IncomeUncheckedUpdateInput = {
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type IncomeCreateManyInput = {
@@ -358,7 +354,7 @@ export type IncomeCreateManyInput = {
   date?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  userId: number
+  userId: string
 }
 
 export type IncomeUpdateManyMutationInput = {
@@ -378,7 +374,7 @@ export type IncomeUncheckedUpdateManyInput = {
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type IncomeListRelationFilter = {
@@ -405,7 +401,6 @@ export type IncomeCountOrderByAggregateInput = {
 export type IncomeAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   amount?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
 }
 
 export type IncomeMaxOrderByAggregateInput = {
@@ -433,7 +428,6 @@ export type IncomeMinOrderByAggregateInput = {
 export type IncomeSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   amount?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
 }
 
 export type IncomeCreateNestedManyWithoutUserInput = {
@@ -534,7 +528,7 @@ export type IncomeScalarWhereInput = {
   date?: Prisma.DateTimeFilter<"Income"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Income"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Income"> | Date | string
-  userId?: Prisma.IntFilter<"Income"> | number
+  userId?: Prisma.StringFilter<"Income"> | string
 }
 
 export type IncomeCreateManyUserInput = {
@@ -649,7 +643,7 @@ export type $IncomePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     date: Date
     createdAt: Date
     updatedAt: Date
-    userId: number
+    userId: string
   }, ExtArgs["result"]["income"]>
   composites: {}
 }
@@ -1081,7 +1075,7 @@ export interface IncomeFieldRefs {
   readonly date: Prisma.FieldRef<"Income", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Income", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Income", 'DateTime'>
-  readonly userId: Prisma.FieldRef<"Income", 'Int'>
+  readonly userId: Prisma.FieldRef<"Income", 'String'>
 }
     
 

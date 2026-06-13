@@ -1,10 +1,14 @@
 import { ExpenseModel } from "../../prisma/generated/prisma/models/Expense";
 import { appError } from "../utils/appError";
 import { prisma } from "../config/lib";
-import { expenseInputType, ExpenseQueryType } from "../schemas/expense.schema";
+import {
+  expenseInputType,
+  ExpenseQueryType,
+  expenseUpdateType,
+} from "../schemas/expense.schema";
 async function createExpense(
   data: expenseInputType,
-  uid: number,
+  uid: string,
 ): Promise<ExpenseModel> {
   if (!data) {
     throw new appError("missing expected field(s)!", 400);
@@ -30,16 +34,7 @@ async function createExpense(
   const newExpense = await prisma.expense.create({ data });
   return newExpense;
 }
-// async function getAllExpenses(
-//   userId: number | undefined,
-// ): Promise<ExpenseModel[]> {
-//   const expenses = await prisma.expense.findMany({ where: { userId: userId } });
-//   if (!expenses) {
-//     throw new appError("no expense is found", 404);
-//   }
-//   return expenses;
-// }
-async function getExpense(filters: ExpenseQueryType, uid: number | undefined) {
+async function getExpense(filters: ExpenseQueryType, uid: string | undefined) {
   const {
     id,
     search,
@@ -56,11 +51,11 @@ async function getExpense(filters: ExpenseQueryType, uid: number | undefined) {
   if (skip <= 0) {
     skip = 0;
   }
-  const authUid = Number(uid);
+
   //define where clause for reuse in prisma trx
   const whereCondition = {
     id: id,
-    userId: authUid,
+    userId: uid,
     category: category
       ? {
           name: { equals: category, mode: "insensitive" as const },
@@ -98,61 +93,46 @@ async function getExpense(filters: ExpenseQueryType, uid: number | undefined) {
     prisma.expense.count({ where: whereCondition }),
   ]);
 
-  // if (!expenses) {
-  //   throw new appError("expense not found!", 404);
-  // }
   return { expenses, pageRecords };
 }
 async function updateExpense(
-  data: expenseInputType,
+  data: expenseUpdateType,
   id: number,
+  uid: string,
 ): Promise<ExpenseModel> {
   //user id must not be updated since only logged in user can update his expense only and not transfer the expense to someone else.
+  const checkCategory = await prisma.category.findUnique({
+    where: { id: data.categoryId },
+  });
+  if (!checkCategory) {
+    throw new appError("the category to update to is not found", 404);
+  }
   const checkExpense = await prisma.expense.findUnique({
-    where: { id },
+    where: { id: id, userId: uid },
   });
   if (!checkExpense) {
     throw new appError("Expense not found!", 404);
   }
-  if (data.categoryId || data.userId) {
-    if (data.userId) {
-      const checkUser = await prisma.user.findUnique({
-        where: { id: data.userId },
-      });
-      if (!checkUser) {
-        throw new appError("the user to update to is not found", 404);
-      }
-    } else {
-      const checkCategory = await prisma.category.findUnique({
-        where: { id: data.categoryId },
-      });
-      if (!checkCategory) {
-        throw new appError("the category to update to is not found", 404);
-      }
-    }
-  }
-
   if (data.date) {
     data.date = new Date(data.date);
   }
 
-  console.log(data.date);
   const updatedExpense = await prisma.expense.update({
-    where: { id },
+    where: { id: id, userId: uid },
     data,
   });
   return updatedExpense;
 }
 
-async function deleteExpense(id: number): Promise<ExpenseModel> {
+async function deleteExpense(id: number, uid: string): Promise<ExpenseModel> {
   const checkExpense = await prisma.expense.findUnique({
-    where: { id },
+    where: { id: id, userId: uid },
   });
   if (!checkExpense) {
     throw new appError("Expense to delete not found!", 404);
   }
   const deletedExpense = await prisma.expense.delete({
-    where: { id },
+    where: { id: id, userId: uid },
   });
   return deletedExpense;
 }

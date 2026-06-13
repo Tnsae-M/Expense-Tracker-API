@@ -13,7 +13,7 @@ datasource db {
   provider = "postgresql"
 }
 model User{
-  id  Int @id @default(autoincrement())
+  id       String  @id @default(uuid())
   fullName String 
   username String @unique
   email    String @unique
@@ -40,8 +40,10 @@ model Expense{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   //relationship to user
-  userId Int
+  userId String
   user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  //index
+  @@index([userId])
   // relationship to category
   categoryId Int
   category Category @relation(fields:[categoryId],references:[id])
@@ -56,6 +58,8 @@ model Income{
   updatedAt DateTime @updatedAt
 
   //relationship to user
-  userId Int
+  userId String
   user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  //index
+  @@index([userId])
 }

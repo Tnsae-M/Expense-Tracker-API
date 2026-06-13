@@ -2,7 +2,7 @@
 
 ## Base Routes
 
-- `GET /` - Server status
+- `GET /health` - Server status
 - `GET /start` - Welcome message
 
 ## Authentication
@@ -12,7 +12,6 @@ Base path: `/api/auth`
 - `POST /api/auth/register` - Register a new user
 - `POST /api/auth/login` - Login existing user
 - `POST /api/auth/logout` - Logout user
-- `GET /api/auth/dashboard` - Protected dashboard route
 
 ## Users
 

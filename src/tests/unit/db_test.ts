@@ -1,4 +1,4 @@
-import { prisma } from "../config/lib";
+import { prisma } from "../../config/lib";
 
 async function runDiagnostics() {
   console.log("🚀 Starting Prisma 7 Diagnostic Test...");

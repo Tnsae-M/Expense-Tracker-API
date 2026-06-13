@@ -1,4 +1,4 @@
-# Expense Tracker API
+# Expense Tracker API 🚀
 
 [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
@@ -6,146 +6,85 @@
 [![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Zod](https://img.shields.io/badge/Zod-7C3AED?style=for-the-badge&logo=zod&logoColor=white)](https://zod.dev/)
+[![Vitest](https://img.shields.io/badge/Vitest-Tested-729B1B?style=for-the-badge&logo=vitest&logoColor=white)]()
 
-## Overview
+A highly scalable, production-ready backend engine designed to power cross-platform financial applications. Built with a focus on data integrity, fast iteration, and bulletproof security—ensuring the business logic never fails when handling user data and money.
 
-Expense Tracker API is a backend-only REST API for managing users, categories, expenses, income, and monthly analytics.
-It is built for secure, cookie-based JWT authentication with strong request validation and a PostgreSQL database powered by Prisma.
+## 🌟 Why This Project Stands Out
 
-This API supports budget tracking workflows with filtered expense/income queries and a monthly analytics summary for authenticated users.
+This project was built **API-First**, serving as a robust headless backend that can simultaneously power Web, iOS, and Android applications without requiring duplicate business logic.
 
-## Tech Stack
+Whether you're a startup looking to scale or a business needing a reliable financial tool, this API provides the robust foundation you need.
 
-- **Node.js + Express**: performant server framework for REST endpoints.
-- **TypeScript**: static typing and safer backend architecture.
-- **Prisma + PostgreSQL**: type-safe ORM with robust database modeling.
-- **Zod**: runtime validation for request data and schema inference.
-- **cookie-parser + jose**: cookie-based JWT authentication for session security.
-- **Helmet + express-rate-limit**: protection against common web attacks and request abuse.
+## 🔐 Enterprise-Grade Security
 
-### Why this stack?
+Security isn't an afterthought. This API is built to protect sensitive user financial data:
 
-This backend leverages TypeScript and Prisma because they provide a strong typed contract across the API and database layers.
-Express keeps the architecture simple and extensible, while Zod makes request validation explicit and reliable.
-PostgreSQL offers a scalable relational foundation for expense and income tracking.
+- **Session Security:** Utilizes HTTP-only cookies for JWT authentication, preventing XSS attacks common with `localStorage` implementations.
+- **Attack Prevention:** Secured against brute-force attacks via Rate Limiting and protected from common web vulnerabilities using `Helmet` and strict CORS configurations.
+- **Payload Sanitization:** Strict runtime validation powered by **Zod** ensures that malicious or malformed data never touches the database.
+- **Data Privacy:** Object destructuring and Prisma select statements guarantee sensitive fields (like hashed passwords) never leak in API responses.
 
-From a product perspective, this stack supports fast iteration and stable API delivery, which is essential for a finance tool where data integrity and reliable authentication matter most.
+## 🧪 Testing & Reliability
 
-## Folder structure
+Clients and businesses need code that doesn't break. This API is covered by a robust test suite using **Vitest** and **Supertest**:
 
-```text
-expense-tracker-API/
-├─ package.json
-├─ readme.md
-├─ tsconfig.json
-├─ prisma/
-│  ├─ schema.prisma
-│  └─ migrations/
-├─ src/
-│  ├─ app.ts
-│  ├─ server.ts
-│  ├─ config/
-│  │  └─ lib.ts
-│  ├─ controllers/
-│  │  ├─ analytics.controller.ts
-│  │  ├─ auth.controller.ts
-│  │  ├─ category.controller.ts
-│  │  ├─ expense.controller.ts
-│  │  ├─ income.controller.ts
-│  │  └─ user.controller.ts
-│  ├─ routes/
-│  │  ├─ analytics.routes.ts
-│  │  ├─ auth.routes.ts
-│  │  ├─ category.routes.ts
-│  │  ├─ expense.route.ts
-│  │  ├─ income.route.ts
-│  │  └─ user.routes.ts
-│  ├─ schemas/
-│  ├─ services/
-│  ├─ utils/
-│  ├─ middleware/
-│  └─ types/
-```
+- **Unit Testing:** Isolated testing of core service logic (e.g., budget calculations, validations) mocking the database layer.
+- **Integration Testing:** End-to-end endpoint verification guaranteeing that routing, middlewares, and database interactions work flawlessly together.
 
-## Deployment
+## 🛠 Tech Stack & Architecture
 
-Live API: https://expense-tracker-api-ycqe.onrender.com
+- **Node.js + Express**: Performant server framework for REST endpoints.
+- **TypeScript**: Static typing prevents entire categories of runtime bugs, enabling safer backend architecture.
+- **Prisma + PostgreSQL**: Type-safe ORM with robust relational database modeling, utilizing indexed queries (`@@index([userId])`) for high-performance data retrieval at scale.
+- **Zod**: Runtime validation for request data and schema inference.
+
+## 🚀 Deployment
+
+- **Live API:** [https://expense-tracker-api-ycqe.onrender.com](https://expense-tracker-api-ycqe.onrender.com)
+- **Interactive Documentation:** [Live Postman Collection](https://documenter.getpostman.com/view/46046797/2sBXwsKpQx)
 
 Hosted on Render for easy cloud deployment and managed runtime.
 
-## Environment Variables
+## 💼 Core Features
 
-The API relies on the following environment variables:
+- **Authentication System:** Secure registration, login, logout, and protected routes.
+- **Budget & Expense Tracking:** Filterable expense and income records with date ranges, amount constraints, and pagination for high-volume data handling.
+- **Monthly Analytics:** Aggregated financial summaries, burn rates, and top spending category calculations generated via efficient Prisma `$transaction` operations.
 
-- `PORT` - Port where the API listens.
-- `DATABASE_URL` - PostgreSQL connection string used by Prisma.
-- `JWT_SECRET` - Secret used to sign and verify JWTs.
+## 💡 Challenges & Lessons Learned
 
-## API Endpoints
+- **Securing Direct Object References (IDOR):** I initially only queried expenses by their `id` when updating or deleting. I realized this allowed any authenticated user to modify someone else's expense if they guessed the ID. I fixed this by ensuring `userId` is strictly checked alongside the resource `id` in all database mutations.
+- **Data Privacy in Updates:** When updating a user profile, Prisma returns the entire updated object by default. I accidentally leaked the hashed password in the JSON response before catching it. I learned to use JavaScript object destructuring (`const { password, ...safeUser } = user`) to ensure sensitive fields never leave the server.
+- **Predictable IDs vs Security:** I originally used auto-incrementing integers for User IDs. I realized this made it easy for attackers to guess user IDs and know exactly how many users my app has. I migrated the schema to use `UUIDs` for user identities, learning how to handle relational schema changes in Prisma.
+- **Type Safety in Express Middleware:** Wrapping route handlers in a `catchAsync` function is a great pattern, but I initially typed the parameter as `Function`, which bypassed TypeScript's checks. I learned to define an explicit `asyncReqHandler` type, ensuring that I get full IDE intellisense and compile-time safety across all my controllers.
+- **Database Scaling Basics:** I learned that foreign keys aren't automatically indexed in PostgreSQL. Since the API constantly filters expenses and incomes by `userId`, I added `@@index([userId])` to the Prisma schema to prevent full-table scans and ensure the queries remain fast as the database grows.
 
-### Server health
-
-- `GET /` - Server status.
-- `GET /start` - Welcome message.
-
-### Authentication (`/api/auth`)
-
-- `POST /api/auth/register` - Register a new user.
-- `POST /api/auth/login` - Login and receive a cookie-based JWT.
-- `POST /api/auth/logout` - Logout and clear the auth cookie.
-- `GET /api/auth/dashboard` - Protected dashboard route.
-
-### Users (`/api/users`)
-
-- `GET /api/users/me` - Get authenticated user's profile.
-- `PATCH /api/users/me` - Update authenticated user's profile.
-
-### Categories (`/api/categories`)
-
-- `POST /api/categories/` - Create a new category.
-- `GET /api/categories/` - Get all categories.
-- `PATCH /api/categories/:id` - Update a category.
-- `DELETE /api/categories/:id` - Delete a category.
-
-### Expenses (`/api/expenses`)
-
-- `POST /api/expenses/` - Create a new expense.
-- `GET /api/expenses/` - Get expenses by filter.
-- `PATCH /api/expenses/:id` - Update an expense.
-- `DELETE /api/expenses/:id` - Delete an expense.
-
-### Income (`/api/income`)
-
-- `POST /api/income/` - Create a new income record.
-- `GET /api/income/` - Get income records.
-- `PATCH /api/income/:id` - Update an income record.
-- `DELETE /api/income/:id` - Delete an income record.
-
-### Analytics (`/api/analytics`)
-
-- `GET /api/analytics/summary` - Get monthly analytics summary.
-
-## Key Highlights
-
-- Cookie-based JWT authentication for secure protected routes.
-- Zod-powered request validation for reliable input handling.
-- Monthly analytics summary and filterable expense/income endpoints.
-
-## Lessons Learned
-
-- **Type-safe backend design**: TypeScript and Prisma help keep controller, service, and database contracts aligned.
-- **Runtime validation is essential**: Zod reduces bugs by validating external request payloads before business logic runs.
-- **Production-ready security**: adding helmet, rate limiting, and cookie handling made the API more deployment-ready.
-
-## Local Setup
+## 💻 Local Setup
 
 ```bash
+# Install dependencies
 npm install
+
+# Generate Prisma Client
+npx prisma generate
+
+# Apply database migrations
+npx prisma migrate dev
+
+# Run test suite
+npm run test:unit
+npm run test:integrated
+
+# Start development server
 npm run dev
 ```
 
 Then visit `http://localhost:<PORT>`.
 
-## Notes
+## 🤝 Let's Work Together!
 
-This repository is backend-only and focuses on the API layer for expense tracking rather than a frontend UI.
+I specialize in building secure, scalable, and fully tested backend systems for startups and businesses. If you need a reliable engineer to architect your next API or backend service, let's connect!
+
+- **Email:** tinsae.melkamu.tk@gmail.com
+- **LinkedIn:** https://www.linkedin.com/in/tinsae-melkamu

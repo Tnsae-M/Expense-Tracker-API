@@ -7,13 +7,14 @@ import {
   deleteIncome,
 } from "../services/income.service";
 import { incomeQuerySchema } from "../schemas/income.schema";
+import { serializePrismaResult } from "../utils/prisma-serializer";
 
 const addIncomeController = catchAsync(async (req: Request, res: Response) => {
-  const id = req.user?.tokenUserId;
+  const id = req.user?.tokenUserId!;
   const income = await addIncome(req.body, id);
   res.status(201).json({
     success: true,
-    data: income,
+    data: serializePrismaResult(income),
   });
 });
 const getIncomeController = catchAsync(async (req: Request, res: Response) => {
@@ -24,15 +25,15 @@ const getIncomeController = catchAsync(async (req: Request, res: Response) => {
     success: true,
     message: "income(s) retrieved successfully",
     result: incomes.length,
-    data: incomes,
+    data: serializePrismaResult(incomes),
   });
 });
 const updateIncomeController = catchAsync(
   async (req: Request, res: Response) => {
     const id = Number(req.params.id);
-    const uid = Number(req.user?.tokenUserId);
+    const uid = req.user?.tokenUserId!;
     if (Object.keys(req.body).length === 0) {
-      return res.status(201).json({
+      return res.status(200).json({
         success: true,
         message: "No changes to update",
       });
@@ -41,20 +42,16 @@ const updateIncomeController = catchAsync(
     res.status(200).json({
       success: true,
       message: "income updated successfully",
-      data: updatedIncome,
+      data: serializePrismaResult(updatedIncome),
     });
   },
 );
 const deleteIncomeController = catchAsync(
   async (req: Request, res: Response) => {
     const id = Number(req.params.id);
-    const uid = Number(req.user?.tokenUserId);
-    const deleteInc = await deleteIncome(id, uid);
-    res.status(201).json({
-      success: true,
-      message: "income deleted successfully.",
-      data: deleteInc,
-    });
+    const uid = req.user?.tokenUserId!;
+    await deleteIncome(id, uid);
+    res.status(204).send();
   },
 );
 export {

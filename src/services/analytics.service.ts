@@ -1,21 +1,14 @@
 import { AnalyticsQuerySchema } from "../schemas/analytics.schema";
-// import { appError } from "../utils/appError";
 import { prisma } from "../config/lib";
 export const getMonthlyAnalytics = async function (
   filter: AnalyticsQuerySchema,
-  userId: number,
+  userId: string,
 ) {
   let { month, year, category } = filter;
   month = Number(month);
   year = Number(year);
   const startDate = new Date(year, month - 1, 1, 0, 0, 0, 0);
   const endDate = new Date(year, month, 0, 23, 59, 59, 999);
-  //   console.log(
-  //     "SEARCHING BETWEEN:",
-  //     startDate.toISOString(),
-  //     "AND",
-  //     endDate.toISOString(),
-  //   );
   const categories = await prisma.category.findMany();
   let targetId: number | undefined;
   if (category) {

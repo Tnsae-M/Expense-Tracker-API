@@ -1,16 +1,12 @@
 import { hashPassword, comparePassword } from "../utils/password";
 import { prisma } from "../config/lib";
 import type { UserModel } from "../../prisma/generated/prisma/models";
-import { signUpDto } from "../dtos/user.dto";
 import { appError } from "../utils/appError";
 import { SignUpSchemaType, SignInSchemaType } from "../schemas/user.schema";
 export type SafeUser = Omit<UserModel, "password">;
 //=================================================================
 async function registerUser(data: SignUpSchemaType): Promise<SafeUser> {
   const { fullName, username, email, password, monthlyBudget, currency } = data;
-  if (!fullName || !username || !email || !password || !monthlyBudget) {
-    throw new appError("missing required field(s)!", 400);
-  }
   const checkByEmail = await prisma.user.findFirst({
     where: {
       email: email.toLocaleLowerCase().trim(),
@@ -32,10 +28,10 @@ async function registerUser(data: SignUpSchemaType): Promise<SafeUser> {
   const newUser = await prisma.user.create({
     data: {
       fullName: fullName,
-      email: email.toLocaleLowerCase().trim(),
-      username: username.trim(),
+      email: email,
+      username: username,
       password: hashedPassword,
-      monthlyBudget: Number(monthlyBudget),
+      monthlyBudget: monthlyBudget,
       currency: currency || "ETB",
     },
     select: {
@@ -53,9 +49,6 @@ async function registerUser(data: SignUpSchemaType): Promise<SafeUser> {
 //===================================================================
 async function loginUser(data: SignInSchemaType): Promise<SafeUser> {
   const { emailOrUsername, password } = data;
-  if (!emailOrUsername || !password) {
-    throw new appError("missing username/email or password field", 400);
-  }
   const checkUser = await prisma.user.findFirst({
     where: {
       OR: [
