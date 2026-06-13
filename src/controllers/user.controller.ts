@@ -4,6 +4,7 @@ import { prisma } from "../config/lib";
 import { Request, Response } from "express";
 import { fetchProfile, updateUserProfile } from "../services/user.service";
 import { updateProfileSchema } from "../schemas/profile.schema";
+import { serializePrismaResult } from "../utils/prisma-serializer";
 //profile routes
 const getProfile = catchAsync(async (req: Request, res: Response) => {
   const userDataToken = req.user;
@@ -14,7 +15,7 @@ const getProfile = catchAsync(async (req: Request, res: Response) => {
   return res.status(200).json({
     success: true,
     message: `welcome to profile page, ${userProfile?.username}`,
-    data: userProfile,
+    data: serializePrismaResult(userProfile),
   });
 });
 
@@ -37,7 +38,7 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
   return res.status(200).json({
     success: true,
     message: "profile updated successfully",
-    profile: currentUser,
+    profile: serializePrismaResult(currentUser),
   });
 });
 export { getProfile, updateProfile };

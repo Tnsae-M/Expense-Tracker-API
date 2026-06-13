@@ -7,13 +7,14 @@ import {
   deleteIncome,
 } from "../services/income.service";
 import { incomeQuerySchema } from "../schemas/income.schema";
+import { serializePrismaResult } from "../utils/prisma-serializer";
 
 const addIncomeController = catchAsync(async (req: Request, res: Response) => {
   const id = req.user?.tokenUserId!;
   const income = await addIncome(req.body, id);
   res.status(201).json({
     success: true,
-    data: income,
+    data: serializePrismaResult(income),
   });
 });
 const getIncomeController = catchAsync(async (req: Request, res: Response) => {
@@ -24,7 +25,7 @@ const getIncomeController = catchAsync(async (req: Request, res: Response) => {
     success: true,
     message: "income(s) retrieved successfully",
     result: incomes.length,
-    data: incomes,
+    data: serializePrismaResult(incomes),
   });
 });
 const updateIncomeController = catchAsync(
@@ -41,7 +42,7 @@ const updateIncomeController = catchAsync(
     res.status(200).json({
       success: true,
       message: "income updated successfully",
-      data: updatedIncome,
+      data: serializePrismaResult(updatedIncome),
     });
   },
 );

@@ -4,6 +4,7 @@ import { signInSchema, signUpSchema } from "../schemas/user.schema";
 import { generateToken } from "../utils/token";
 import { authReqLimiter } from "../utils/rate.limiter";
 import { catchAsync } from "../utils/catch.async";
+import { serializePrismaResult } from "../utils/prisma-serializer";
 import dotenv from "dotenv";
 dotenv.config();
 export const signUp = catchAsync(async (req: Request, res: Response) => {
@@ -19,7 +20,7 @@ export const signUp = catchAsync(async (req: Request, res: Response) => {
   res.status(201).json({
     success: true,
     message: "User registered successfully",
-    data: newUser,
+    data: serializePrismaResult(newUser),
   });
 });
 
@@ -39,7 +40,7 @@ const login = catchAsync(async (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Login successful",
-    data: user,
+    data: serializePrismaResult(user),
   });
 });
 const logout = catchAsync(async (req: Request, res: Response) => {

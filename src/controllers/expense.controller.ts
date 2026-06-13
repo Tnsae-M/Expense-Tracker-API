@@ -7,6 +7,7 @@ import {
   deleteExpense,
 } from "../services/expense.service";
 import { expenseInput, expenseQuerySchema } from "../schemas/expense.schema";
+import { serializePrismaResult } from "../utils/prisma-serializer";
 export const newExpense = catchAsync(async (req: Request, res: Response) => {
   const id = req.user?.tokenUserId!;
   const validData = expenseInput.parse(req.body);
@@ -14,7 +15,7 @@ export const newExpense = catchAsync(async (req: Request, res: Response) => {
   res.status(201).json({
     success: true,
     message: "Expense created successfully",
-    data: newExpense,
+    data: serializePrismaResult(newExpense),
   });
 });
 export const getExpenseByFilter = catchAsync(
@@ -32,7 +33,7 @@ export const getExpenseByFilter = catchAsync(
       currentPage: currentPage,
       totalPages: totalPages,
       totalRecords: expense.pageRecords,
-      data: expense.expenses,
+      data: serializePrismaResult(expense.expenses),
     });
   },
 );
@@ -50,7 +51,7 @@ export const updateExpenseById = catchAsync(
     res.status(200).json({
       success: true,
       message: "Expense updated successfully",
-      data: updatedExpense,
+      data: serializePrismaResult(updatedExpense),
     });
   },
 );
