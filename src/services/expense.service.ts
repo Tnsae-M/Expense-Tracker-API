@@ -100,17 +100,10 @@ async function getExpense(filters: ExpenseQueryType, uid: string | undefined) {
   return { expenses, pageRecords };
 }
 async function updateExpense(
-  data: expenseUpdateType,
+  data: Partial<expenseUpdateType>,
   id: number,
   uid: string,
 ): Promise<ExpenseModel> {
-  //user id must not be updated since only logged in user can update his expense only and not transfer the expense to someone else.
-  const checkCategory = await prisma.category.findUnique({
-    where: { id: data.categoryId },
-  });
-  if (!checkCategory) {
-    throw new appError("the category to update to is not found", 404);
-  }
   const checkExpense = await prisma.expense.findUnique({
     where: { id: id, userId: uid },
   });

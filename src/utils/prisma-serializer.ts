@@ -20,7 +20,9 @@ export function serializePrismaResult<T>(value: T): T {
   if (isPrismaDecimal(value)) {
     return Number(value.toNumber()) as unknown as T;
   }
-
+  if (value instanceof Date) {
+    return value as unknown as T;
+  }
   if (typeof value === "object") {
     const normalized: Record<string, unknown> = {};
     for (const [key, item] of Object.entries(
