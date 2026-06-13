@@ -12,13 +12,14 @@ A highly scalable, production-ready backend engine designed to power cross-platf
 
 ## 🌟 Why This Project Stands Out
 
-This project was built **API-First**, serving as a robust headless backend that can simultaneously power Web, iOS, and Android applications without requiring duplicate business logic. 
+This project was built **API-First**, serving as a robust headless backend that can simultaneously power Web, iOS, and Android applications without requiring duplicate business logic.
 
 Whether you're a startup looking to scale or a business needing a reliable financial tool, this API provides the robust foundation you need.
 
 ## 🔐 Enterprise-Grade Security
 
 Security isn't an afterthought. This API is built to protect sensitive user financial data:
+
 - **Session Security:** Utilizes HTTP-only cookies for JWT authentication, preventing XSS attacks common with `localStorage` implementations.
 - **Attack Prevention:** Secured against brute-force attacks via Rate Limiting and protected from common web vulnerabilities using `Helmet` and strict CORS configurations.
 - **Payload Sanitization:** Strict runtime validation powered by **Zod** ensures that malicious or malformed data never touches the database.
@@ -27,6 +28,7 @@ Security isn't an afterthought. This API is built to protect sensitive user fina
 ## 🧪 Testing & Reliability
 
 Clients and businesses need code that doesn't break. This API is covered by a robust test suite using **Vitest** and **Supertest**:
+
 - **Unit Testing:** Isolated testing of core service logic (e.g., budget calculations, validations) mocking the database layer.
 - **Integration Testing:** End-to-end endpoint verification guaranteeing that routing, middlewares, and database interactions work flawlessly together.
 
@@ -77,12 +79,12 @@ npm run test:integrated
 # Start development server
 npm run dev
 ```
+
 Then visit `http://localhost:<PORT>`.
 
 ## 🤝 Let's Work Together!
 
 I specialize in building secure, scalable, and fully tested backend systems for startups and businesses. If you need a reliable engineer to architect your next API or backend service, let's connect!
 
-- **Email:** [Your Email Here]
-- **LinkedIn:** [Your LinkedIn Profile Here]
-- **Portfolio:** [Your Portfolio Website Here]
+- **Email:** tinsae.melkamu.tk@gmail.com
+- **LinkedIn:** https://www.linkedin.com/in/tinsae-melkamu
