@@ -12,9 +12,6 @@ export const protectedRoute = catchAsync(
     if (!token) {
       throw new appError("Not authorized. token missing!", 401);
     }
-    if (process.env.NODE_ENV === "Development") {
-      console.log(token);
-    }
     const decodedLoad = await verifyToken(token);
     if (!decodedLoad) {
       throw new appError("Token expired!", 401);
