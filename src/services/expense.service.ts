@@ -29,9 +29,13 @@ async function createExpense(
   if (!checkCategory) {
     throw new appError("Category not found!", 404);
   }
-  data.date = new Date(data.date);
-  data.userId = uid;
-  const newExpense = await prisma.expense.create({ data });
+  const newExpense = await prisma.expense.create({
+    data: {
+      ...data,
+      date: new Date(data.date),
+      userId: uid,
+    },
+  });
   return newExpense;
 }
 async function getExpense(filters: ExpenseQueryType, uid: string | undefined) {
